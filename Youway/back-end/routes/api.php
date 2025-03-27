@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\MentorController;
 
+use App\Http\Controllers\StudentController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +16,5 @@ Route::post('login' ,[AuthController::class, 'login'] );
 
 Route::apiResource('mentors', MentorController::class);
 Route::get('/mentors/search', [MentorController::class, 'search']);
+
+Route::apiResource('students', StudentController::class);
