@@ -33,6 +33,38 @@
      ], 201);
      }
  
+     public function login(Request $request)
+     {
+      
+   
+ $request->validate([
+     'email' => 'required|email',
+     'password' => 'required',
+ ]);
+ 
+ 
+ $credentials = $request->only('email', 'password');
+ 
+ if (!$token = auth('api')->attempt($credentials)) {
+     return response()->json([
+         'status' => 'error',
+         'message' => 'Unauthorized',
+     ], 401);
+ }
+ 
+ $user = auth('api')->user();
+ 
+ return response()->json([
+     'status' => 'success',
+     'user' => $user,
+     'authorization' => [
+         'token' => $token,
+         'type' => 'bearer',
+     ]
+ ]);
+ 
+ 
+ }
     
  
  }
