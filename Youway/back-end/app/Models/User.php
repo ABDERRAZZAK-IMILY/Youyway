@@ -73,6 +73,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
+    public function mentor()
+    {
+        return $this->hasOne(Mentor::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
 
 
 }
