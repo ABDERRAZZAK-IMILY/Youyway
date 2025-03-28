@@ -8,11 +8,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    /**
-     * Get statistics.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+   
     public function getStatistics()
     {
         $totalUsers = User::count();
@@ -46,12 +42,7 @@ class AdminController extends Controller
         ], 200);
     }
 
-    /**
-     * Suspend a user.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\JsonResponse
-     */
+  
     public function suspendUser(User $user)
     {
         $user->update(['status' => 'suspended']);
@@ -62,12 +53,7 @@ class AdminController extends Controller
         ], 200);
     }
 
-    /**
-     * Validate a mentor profile.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\JsonResponse
-     */
+  
     public function validateMentor(User $user)
     {
          if ($user->role != 'mentor') {
