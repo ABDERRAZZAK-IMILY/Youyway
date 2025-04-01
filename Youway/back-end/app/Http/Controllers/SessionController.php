@@ -81,4 +81,17 @@ class SessionController extends Controller
             'session' => $session,
         ], 200);
     }
+
+
+    public function completeSession(Session $session)
+    {
+        $session->update([
+            'status' => 'completed'
+        ]);
+
+        return response()->json([
+            'message' => 'Session marked as completed successfully',
+            'session' => $session->load(['mentor.user', 'student.user'])
+        ]);
+    }
 }
