@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('student'); // admin, mentor, student
             $table->rememberToken();
             $table->timestamps();
+            $table->string('status')->default('active')->after('role'); // active, suspended, validated
+            $table->timestamp('last_activity_at')->nullable()->after('status');
         });
     }
 
