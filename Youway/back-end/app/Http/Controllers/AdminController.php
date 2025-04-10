@@ -16,15 +16,7 @@ class AdminController extends Controller
         $totalStudents = User::where('role', 'student')->count();
         $totalSessions = Session::count();
         
-        $evaluationStats = [
-            'teaching_quality' => Evaluation::avg('teaching_quality'),
-            'communication' => Evaluation::avg('communication'),
-            'knowledge' => Evaluation::avg('knowledge'),
-            'punctuality' => Evaluation::avg('punctuality'),
-            'overall_rating' => Evaluation::avg('rating')
-        ];
-        
-        $activeUsers = User::where('last_activity_at', '>=', now()->subDays(30))->count();
+    
         $completedSessions = Session::where('status', 'completed')->count();
         $pendingSessions = Session::where('status', 'pending')->count();
         
@@ -33,12 +25,10 @@ class AdminController extends Controller
             'totalMentors' => $totalMentors,
             'totalStudents' => $totalStudents,
             'totalSessions' => $totalSessions,
-            'activeUsers' => $activeUsers,
             'sessionStats' => [
                 'completed' => $completedSessions,
                 'pending' => $pendingSessions
             ],
-            'evaluationStats' => $evaluationStats
         ], 200);
     }
 

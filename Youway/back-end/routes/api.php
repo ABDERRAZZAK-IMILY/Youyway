@@ -66,6 +66,9 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('/admin/users/{user}/suspend', [AdminController::class, 'suspendUser']);
         Route::patch('/admin/users/{user}/activate', [AdminController::class, 'activateUser']);
         Route::get('/admin/reports', [AdminController::class, 'getReports']);
-        Route::post('/admin/moderate/message', [AdminController::class, 'moderateMessage']);
+        Route::post('/admin/users/{user}/validate', [AdminController::class, 'validateMentor']);
     });
+
+    Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
+
 });
