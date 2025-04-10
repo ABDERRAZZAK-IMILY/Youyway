@@ -68,7 +68,4 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/admin/reports', [AdminController::class, 'getReports']);
         Route::post('/admin/users/{user}/validate', [AdminController::class, 'validateMentor']);
     });
-
-    Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
-
 });
