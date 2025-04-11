@@ -19,23 +19,23 @@ class MessageController extends Controller
         return response()->json($messages);
     }
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'session_id' => 'required|exists:session,id',
-            'content' => 'required|string',
-        ]);
+   public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'session_id' => 'required|exists:sessions,id',
+        'content' => 'required|string',
+    ]);
 
-        $message = Message::create([
-            'session_id' => $validatedData['session_id'],
-            'sender_id' => Auth::id(),
-            'content' => $validatedData['content'],
-        ]);
+    $message = Message::create([
+        'session_id' => $validatedData['session_id'],
+        'sender_id' => Auth::id(),
+        'content' => $validatedData['content'],
+    ]);
 
-        $message->load('sender');
+    $message->load('sender');
 
-        broadcast(new NewMessage($message))->toOthers();
+    broadcast(new NewMessage($message))->toOthers();
 
-        return response()->json($message, 201);
-    }
+    return response()->json($message, 201);
+}
 }
