@@ -19,7 +19,7 @@ export default function Layout({ children }) {
             </ul>
             <div className="ml-8 flex items-center space-x-4">
               <Link to="/login" className="text-gray-600 hover:text-gray-800">Login</Link>
-              <Link to="/Regester" className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition-colors duration-200 flex items-center">
+              <Link to="/Register" className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition-colors duration-200 flex items-center">
                 JOIN US
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

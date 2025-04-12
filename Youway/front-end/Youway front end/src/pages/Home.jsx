@@ -1,21 +1,43 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-
+import heroimg from '../assets/Placeholder.png';
 
 export default function Home() {
-
-
-    return (
-
-        <div className="flex flex-col justify-center items-center h-screen bg-red-100">
-            <h1 className="text-3xl    font-bold  text-center text-blue-500 ">
-                
-              Hello in Youway
-              <br />
-
+  return (
+    <div className="bg-gray-50">
+      {/* Hero Section */}
+      <section className="pt-8 pb-12 bg-gradient-to-r from-green-50 to-blue-50">
+        <div className="container mx-auto px-4 md:px-8 flex flex-col md:flex-row">
+          <div className="md:w-1/2 pt-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+              25K+ STUDENTS<br />TRUST US
             </h1>
-
-
+            <p className="text-gray-600 mb-8">
+              Our goal is to make the best way for everyone!
+            </p>
+            <div className="flex space-x-4">
+              <button className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 transition-colors duration-200">
+                Get Started Now
+              </button>
+              <button className="border border-gray-300 px-6 py-3 rounded text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                Learn More
+              </button>
             </div>
-    );
+          </div>
+          <div className="md:w-1/2 mt-8 md:mt-0 relative">
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-yellow-100 opacity-50"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-blue-400 opacity-40"></div>
+            <div className="absolute top-1/3 right-1/4 w-16 h-16 rounded-full bg-green-200 opacity-60"></div>
+            <img 
+              src={heroimg} 
+              alt="Happy student with books" 
+              className="relative z-10 mx-auto"
+            />
+          </div>
+        </div>
+      </section>
 
-};
+    </div>
+  );
+}
