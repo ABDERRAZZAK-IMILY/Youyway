@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import heroimg from '../assets/placeholder.png';
 
-import heroimg from '../assets/Placeholder.png';
 
 export default function Home() {
   return (
@@ -30,14 +30,13 @@ export default function Home() {
             <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-blue-400 opacity-40"></div>
             <div className="absolute top-1/3 right-1/4 w-16 h-16 rounded-full bg-green-200 opacity-60"></div>
             <img 
-              src={heroimg} 
+              src={heroimg}
               alt="Happy student with books" 
               className="relative z-10 mx-auto"
             />
           </div>
         </div>
       </section>
-
     </div>
   );
 }
