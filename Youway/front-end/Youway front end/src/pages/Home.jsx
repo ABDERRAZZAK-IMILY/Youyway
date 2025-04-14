@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import heroimg from '../assets/placeholder.png';
 import smilingstudent from '../assets/technology 1.png';
+import tv from '../assets/tvhome.svg';
+import hwjala from '../assets/hawjala.svg';
+import telescope from '../assets/telescope.png';
 
 export default function Home() {
   return (
@@ -43,7 +46,7 @@ export default function Home() {
         <div className="flex px-8 py-12 gap-4">
           <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
             <div className="mb-4">
-              <img src="" alt="Computer icon" className="w-12 h-12" />
+              <img src={tv} alt="tv icon" className="w-12 h-12" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">Certified Mentors</h3>
             <div className="w-12 h-1 bg-red-500 mb-4"></div>
@@ -54,7 +57,7 @@ export default function Home() {
 
           <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
             <div className="mb-4">
-              <img src="" alt="Telescope icon" className="w-12 h-12" />
+              <img src={telescope} alt="Telescope icon" className="w-12 h-12" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">approve your creare</h3>
             <div className="w-12 h-1 bg-red-500 mb-4"></div>
@@ -65,7 +68,7 @@ export default function Home() {
 
           <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
             <div className="mb-4">
-              <img src="" alt="Lab flask icon" className="w-12 h-12" />
+              <img src={hwjala} alt="hawjala icon" className="w-12 h-12" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">2,769 online courses</h3>
             <div className="w-12 h-1 bg-red-500 mb-4"></div>
