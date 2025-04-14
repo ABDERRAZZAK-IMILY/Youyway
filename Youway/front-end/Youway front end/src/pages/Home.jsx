@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import heroimg from '../assets/placeholder.png';
-
+import smilingstudent from '../assets/technology 1.png';
 
 export default function Home() {
   return (
@@ -76,6 +76,33 @@ export default function Home() {
    
 
       </div>
+
+
+   {/* Section 3 */}
+      <div className="min-h-screen bg-white flex items-center justify-center py-16 px-4">
+      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+        <div className="relative w-full md:w-1/2">
+          <div className="relative bg-blue-50 rounded-3xl p-4 max-w-md mx-auto">
+            <img 
+              src={smilingstudent} 
+              alt="Smiling student" 
+              className="w-full h-auto object-cover rounded-2xl"
+            />
+            </div>
+        </div>
+        
+        <div className="w-full md:w-1/2 text-center md:text-left">
+          <div className="mx-auto md:mx-0 md:max-w-md">
+            <div className="w-24 h-1 bg-red-500 mx-auto md:mx-0 mb-6"></div>
+            <h2 className="text-5xl font-bold text-slate-800 mb-6">Find a Mentor</h2>
+            <p className="text-gray-500 mb-8">search for the metore</p>
+            <button className="text-green-500 hover:text-green-600 font-medium flex items-center mx-auto md:mx-0">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     </div>
   );
 }
