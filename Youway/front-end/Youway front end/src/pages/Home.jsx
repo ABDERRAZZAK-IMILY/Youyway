@@ -36,7 +36,46 @@ export default function Home() {
             />
           </div>
         </div>
-      </section>
+      </section>  
+
+
+          {/*  Section 2 */}
+        <div className="flex px-8 py-12 gap-4">
+          <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
+            <div className="mb-4">
+              <img src="" alt="Computer icon" className="w-12 h-12" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Certified Mentors</h3>
+            <div className="w-12 h-1 bg-red-500 mb-4"></div>
+            <p className="text-gray-600">
+              The gradual accumulation of information about atomic and small-scale behaviour...
+            </p>
+          </div>
+
+          <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
+            <div className="mb-4">
+              <img src="" alt="Telescope icon" className="w-12 h-12" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">approve your creare</h3>
+            <div className="w-12 h-1 bg-red-500 mb-4"></div>
+            <p className="text-gray-600">
+              The gradual accumulation of information about atomic and small-scale behaviour...
+            </p>
+          </div>
+
+          <div className="w-1/3 bg-white p-6 rounded-lg shadow-sm">
+            <div className="mb-4">
+              <img src="" alt="Lab flask icon" className="w-12 h-12" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">2,769 online courses</h3>
+            <div className="w-12 h-1 bg-red-500 mb-4"></div>
+            <p className="text-gray-600">
+              The gradual accumulation of information about atomic and small-scale behaviour...
+            </p>
+          </div>
+   
+
+      </div>
     </div>
   );
 }

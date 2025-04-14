@@ -60,7 +60,7 @@ Route::middleware('auth:api')->group(function () {
     /*
     | Admin Routes
     */
-    Route::middleware('admin')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
         Route::get('/admin/users', [AdminController::class, 'getUsers']);
         Route::patch('/admin/users/{user}/suspend', [AdminController::class, 'suspendUser']);
