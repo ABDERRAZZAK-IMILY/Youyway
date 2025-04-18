@@ -42,13 +42,14 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('sessions', SessionController::class);
     Route::put('/sessions/{session}/accept', [SessionController::class, 'acceptSession']);
     Route::put('/sessions/{session}/reject', [SessionController::class, 'rejectSession']);
+    Route::put('/sessions/{session}/complete', [SessionController::class, 'completeSession']);
     
     /*
     | Message Routes
     */
     Route::get('/messages/{sessionId}', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
-    Route::patch('/messages/{id}/moderate', [MessageController::class, 'moderateMessage']);
+    Route::patch('/messages/{id}/modify', [MessageController::class, 'modifyMessage']);
 
     /*
     | Notification Routes
@@ -68,4 +69,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/admin/reports', [AdminController::class, 'getReports']);
         Route::post('/admin/users/{user}/validate', [AdminController::class, 'validateMentor']);
     });
+    /*
+    | Evaluation Routes
+    */
+    Route::post('/sessions/{session}/evaluate', [SessionController::class, 'store']);
+    Route::get('/sessions/{session}/evaluation', [SessionController::class, 'show']);
+    Route::put('/sessions/{session}/evaluation', [SessionController::class, 'update']);
 });

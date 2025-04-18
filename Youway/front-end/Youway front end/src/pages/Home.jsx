@@ -5,6 +5,8 @@ import smilingstudent from '../assets/technology 1.png';
 import tv from '../assets/tvhome.svg';
 import hwjala from '../assets/hawjala.svg';
 import telescope from '../assets/telescope.png';
+import Footer  from '../Layouts/Footer';
+import imily from '../assets/imily.png';
 
 export default function Home() {
   return (
@@ -70,10 +72,10 @@ export default function Home() {
             <div className="mb-4">
               <img src={hwjala} alt="hawjala icon" className="w-12 h-12" />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">2,769 online courses</h3>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">2,769 sessions</h3>
             <div className="w-12 h-1 bg-red-500 mb-4"></div>
             <p className="text-gray-600">
-              The gradual accumulation of information about atomic and small-scale behaviour...
+            "Refining atomic knowledge enhances scientific understanding and analysis."
             </p>
           </div>
    
@@ -105,7 +107,61 @@ export default function Home() {
         </div>
       </div>
     </div>
+    <div className="min-h-screen bg-white py-16 px-4">
+      <div className="container mx-auto max-w-5xl">
+        {/* Header section */}
+        <div className="mb-16">
+          <p className="text-green-500 font-medium mb-2">Testimonials</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Our team</h2>
+          <p className="text-gray-500 max-w-2xl">
+            Problems trying to resolve the promblme of orientaion in morrocco
+          </p>
+        </div>
+        
 
+        {/* our team  */}
+        <div className="flex flex-col items-center max-w-md mx-auto text-center">
+          <div className="mb-6">
+            <img 
+              src={imily}
+              alt="abderrazzak imily" 
+              className="w-24 h-24 rounded-full object-cover"
+            />
+          </div>
+          
+          <p className="text-gray-600 mb-6">
+            1 years of experience in the field of web development, specializing in front-end technologies.
+            Proficient in HTML, CSS, and JavaScript, with a strong understanding of responsive design principles. 
+            Passionate about creating user-friendly interfaces and optimizing web performance.
+            Excellent problem-solving skills and a keen eye for detail.
+          </p>
+          
+          <div className="flex mb-4">
+            <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          </div>
+          
+          <h3 className="text-lg font-bold text-slate-800 mb-1">IMILY ABDERRAZZAK</h3>
+          <p className="text-gray-500">WEB DEVELOPPER</p>
+        </div>
+      </div>
     </div>
+
+
+    <Footer />
+  </div>
   );
 }
