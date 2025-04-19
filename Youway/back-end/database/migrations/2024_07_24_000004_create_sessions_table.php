@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamp('end_time');
             $table->string('status')->default('pending');
             $table->string('request_status')->default('pending')->check("request_status in ('pending', 'accepted', 'rejected')");
+            $table->dateTime('scheduled_at')->nullable()->after('request_status');
             $table->timestamps();
         });
     }
