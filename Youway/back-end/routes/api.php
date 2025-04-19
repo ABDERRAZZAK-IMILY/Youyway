@@ -76,4 +76,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/sessions/{session}/evaluate', [SessionController::class, 'store']);
     Route::get('/sessions/{session}/evaluation', [SessionController::class, 'show']);
     Route::put('/sessions/{session}/evaluation', [SessionController::class, 'update']);
+
+    /*
+    | Agora Token Route
+    */
+    Route::post('agora/token', [\App\Http\Controllers\AgoraController::class, 'getToken']);
 });
