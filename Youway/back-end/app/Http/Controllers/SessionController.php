@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Session;
 use Illuminate\Http\Request;
+use App\Notifications\SessionAcceptedNotification;
+use App\Notifications\SessionScheduledNotification;
 
 class SessionController extends Controller
 {
@@ -66,19 +68,31 @@ class SessionController extends Controller
     {
         $session->update(['request_status' => 'accepted']);
 
+        $session->student->notify(new SessionAcceptedNotification($session));
+
         return response()->json([
             'message' => 'Session successfully accepted',
             'session' => $session,
         ], 200);
     }
 
-    public function rejectSession(Session $session)
+    public function scheduleSession(Request $request, Session $session)
     {
-        $session->update(['request_status' => 'rejected']);
+        $validatedData = $request->validate([
+            'scheduled_at' => 'required|date',
+        ]);
+
+        $session->update([
+            'request_status' => 'scheduled',
+            'scheduled_at' => $validatedData['scheduled_at'],
+            'call_link' => url("/video/session/{$session->id}")
+        ]);
+
+        $session->student->notify(new SessionScheduledNotification($session));
 
         return response()->json([
-            'message' => 'Session successfully rejected',
-            'session' => $session,
+            'message' => 'Session successfully scheduled',
+            'session' => $session
         ], 200);
     }
 
