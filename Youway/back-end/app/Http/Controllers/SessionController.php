@@ -96,6 +96,15 @@ class SessionController extends Controller
         ], 200);
     }
 
+    public function rejectSession(Session $session)
+    {
+        $session->update(['request_status' => 'rejected']);
+
+        return response()->json([
+            'message' => 'Session successfully rejected',
+            'session' => $session,
+        ], 200);
+    }
 
     public function completeSession(Session $session)
     {
