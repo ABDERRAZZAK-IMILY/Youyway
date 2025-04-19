@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->string('request_status')->default('pending')->check("request_status in ('pending', 'accepted', 'rejected')");
             $table->dateTime('scheduled_at')->nullable()->after('request_status');
+            $table->string('call_link')->nullable()->after('scheduled_at');
             $table->timestamps();
         });
     }
