@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class SessionScheduledNotification extends Notification
@@ -14,9 +15,11 @@ class SessionScheduledNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    protected $session;
+
+    public function __construct($session)
     {
-        //
+        $this->session = $session;
     }
 
     /**
@@ -24,31 +27,28 @@ class SessionScheduledNotification extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
+    public function via($notifiable)
+{
+    return ['database','broadcast','mail'];
+}
+public function toDatabase($notifiable)
+{
+    return [
+        'message'   => "Session scheduled on {$this->session->scheduled_at}.",
+        'call_link' => $this->session->call_link,
+    ];
+}
+public function toBroadcast($notifiable)
+{
+    return new BroadcastMessage($this->toDatabase($notifiable));
+}
+public function toMail($notifiable)
+{
+    return (new MailMessage)
+        ->subject('Session Scheduled')
+        ->greeting("Hello {$notifiable->name},")
+        ->line("Your session is scheduled for {$this->session->scheduled_at}.")
+        ->action('Join Session', $this->session->call_link);
+}
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }
