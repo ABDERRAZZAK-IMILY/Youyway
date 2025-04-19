@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => '__root__',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '1848398d883c4552a7ead6d497b83f5548cf8e9e',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '1848398d883c4552a7ead6d497b83f5548cf8e9e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'tomatophp/console-helpers' => array(
+            'pretty_version' => 'v1.1.0',
+            'version' => '1.1.0.0',
+            'reference' => '69dd818a2bfa7d038467fb526be6c9b573d36a34',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tomatophp/console-helpers',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'tomatophp/laravel-agora' => array(
+            'pretty_version' => 'v1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '62a4384e7a9c8d8fc38164ef7e5d8b3e021de941',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tomatophp/laravel-agora',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
