@@ -5,8 +5,19 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/messages', [MessageController::class, 'index']);
+    
+    Route::get('/messages/{userId}', [MessageController::class, 'getMessages']);
+    
+    Route::post('/messages/{userId}', [MessageController::class, 'sendMessage']);
+    
+    Route::get('/inbox-data', [MessageController::class, 'getInboxData']);
+});
+
+use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -51,6 +62,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/messages/{sessionId}', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
     Route::patch('/messages/{id}/modify', [MessageController::class, 'modifyMessage']);
+    
+    /*
+    | Inbox Routes
+    */
+    Route::get('/inbox-data', [MessageController::class, 'getInboxData']);
+    Route::get('/messages/{userId}', [MessageController::class, 'getMessages']);
+    Route::post('/messages/{userId}', [MessageController::class, 'sendMessage']);
 
     /*
     | Notification Routes

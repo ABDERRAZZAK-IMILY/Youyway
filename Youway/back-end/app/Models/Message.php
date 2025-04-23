@@ -12,6 +12,8 @@ class Message extends Model
     protected $fillable = [
         'session_id',
         'sender_id',
+        'recipient_id',
+        'message',
         'content',
     ];
 
@@ -23,5 +25,10 @@ class Message extends Model
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id');
+    }
+    
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_id');
     }
 }
