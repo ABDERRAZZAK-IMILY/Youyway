@@ -1,41 +1,48 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
-
+ 
+use App\Events\MessageSent;
 use App\Models\Message;
-use App\Events\NewMessage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+ 
 class MessageController extends Controller
 {
-    public function index(Request $request, $sessionId)
-    {
-        $messages = Message::where('session_id', $sessionId)
-            ->with('sender')
-            ->orderBy('created_at', 'asc')
-            ->get();
-            
+ 
+    public function inbox() {
+        $users = User::where('id', '!=', Auth::user()->id)->get();
+        return response()->json($users);
+    }
+ 
+    public function store(Request $request, User $user) {
+        $message = new Message;
+        $message->sender_id = Auth::user()->id;
+        $message->recipient_id = $user->id;
+        $message->message = $request->message;
+        $message->save();
+ 
+        broadcast(new MessageSent($message));
+ 
+        return response()->json($message);
+    }
+ 
+    public function show(User $user) {
+        $user1Id = Auth::user()->id;
+        $user2Id = $user->id;
+ 
+        $messages = Message::where(function ($query) use ($user1Id, $user2Id) {
+            $query->where('sender_id', $user1Id)
+                  ->where('recipient_id', $user2Id);
+        })
+        ->orWhere(function ($query) use ($user1Id, $user2Id) {
+            $query->where('sender_id', $user2Id)
+                  ->where('recipient_id', $user1Id);
+        })
+        ->orderBy('created_at', 'asc')
+        ->get(); 
+ 
         return response()->json($messages);
     }
-
-   public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'session_id' => 'required|exists:sessions,id',
-        'content' => 'required|string',
-    ]);
-
-    $message = Message::create([
-        'session_id' => $validatedData['session_id'],
-        'sender_id' => Auth::id(),
-        'content' => $validatedData['content'],
-    ]);
-
-    $message->load('sender');
-
-    broadcast(new NewMessage($message))->toOthers();
-
-    return response()->json($message, 201);
-}
 }

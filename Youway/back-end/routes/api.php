@@ -80,5 +80,5 @@ Route::middleware('auth:api')->group(function () {
     /*
     | Agora Token Route
     */
-    Route::post('agora/token', [\App\Http\Controllers\AgoraController::class, 'getToken']);
+    Route::get('agora/token', [\App\Http\Controllers\AgoraController::class, 'getToken']);
 });
