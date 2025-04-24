@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import { axiosClient } from "../api/axios.js";
 
@@ -48,9 +47,7 @@ export default function Inbox() {
             });
             
             setCurrentMessages(prevMessages => [...prevMessages, response.data]);
-            
             setMessageInput('');
-            
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -114,6 +111,8 @@ export default function Inbox() {
                         const notificationSound = new Audio('/notification.mp3');
                         notificationSound.play().catch(e => console.log('Error playing sound:', e));
                     });
+            } else {
+                console.log("Echo is not initialized or WebSocket channel is empty");
             }
         };
 
@@ -121,6 +120,7 @@ export default function Inbox() {
 
         return () => {
             if (window.Echo && webSocketChannel) {
+                console.log('Leaving WebSocket channel:', webSocketChannel);
                 window.Echo.leave(webSocketChannel);
             }
         };
@@ -196,9 +196,7 @@ export default function Inbox() {
                             {currentMessages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`flex ${
-                                        message.sender_id  == userData.auth.user.id ? "justify-end" : "justify-start"
-                                    }`}
+                                    className={`flex ${message.sender_id  == userData.auth.user.id ? "justify-end" : "justify-start"}`}
                                 >
                                     <div
                                         className={`${

@@ -1,18 +1,11 @@
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher; 
 
 window.Echo = new Echo({
-    broadcaster: 'reverb',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    wssPort: 6001,
-    forceTLS: false,
-    enabledTransports: ['ws', 'wss'],
-    authEndpoint: 'http://localhost:80/broadcasting/auth',
-    auth: {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-    }
+    broadcaster: 'pusher',
+    key: '14093af63cb0b67fb854',
+    cluster: 'eu',
+    forceTLS: true,
 });
-
-console.log('Echo instance loaded:', window.Echo);
