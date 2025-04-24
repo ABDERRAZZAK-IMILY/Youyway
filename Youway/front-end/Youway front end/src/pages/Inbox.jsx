@@ -1,7 +1,6 @@
-import { Head } from '@inertiajs/react';
-import axios from 'axios';
+
 import { useEffect, useRef, useState } from 'react';
-import { axiosClient } from "../api/axios.js"; // Import your authenticated axios client
+import { axiosClient } from "../api/axios.js";
 
 export default function Inbox() {
     const [userData, setUserData] = useState({
@@ -26,6 +25,8 @@ export default function Inbox() {
                 setUserData(response.data);
                 
                 if (response.data.auth && response.data.auth.user) {
+                    localStorage.setItem('userId', response.data.auth.user.id);
+                    localStorage.setItem('name', response.data.auth.user.name);
                     setWebSocketChannel(`message.${response.data.auth.user.id}`);
                 }
                 
@@ -42,11 +43,14 @@ export default function Inbox() {
     const sendMessage = async () => {
         if (!messageInput.trim()) return;
         try {
-            await axiosClient.post(`/messages/${selectedUserRef.current.id}`, {
+            const response = await axiosClient.post(`/messages/${selectedUserRef.current.id}`, {
                 message: messageInput
             });
+            
+            setCurrentMessages(prevMessages => [...prevMessages, response.data]);
+            
             setMessageInput('');
-            getMessages();
+            
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -95,9 +99,20 @@ export default function Inbox() {
     useEffect(() => {
         const connectWebSocket = () => {
             if (window.Echo && webSocketChannel) {
+                console.log('Connecting to WebSocket channel:', webSocketChannel);
+                
                 window.Echo.private(webSocketChannel)
-                    .listen('MessageSent', async (e) => {
-                        await getMessages();
+                    .listen('MessageSent', (e) => {
+                        console.log('MessageSent event received:', e);
+                        
+                        if (selectedUserRef.current && 
+                            (e.message.sender_id === selectedUserRef.current.id || 
+                             e.message.recipient_id === selectedUserRef.current.id)) {
+                            setCurrentMessages(prevMessages => [...prevMessages, e.message]);
+                        }
+                        
+                        const notificationSound = new Audio('/notification.mp3');
+                        notificationSound.play().catch(e => console.log('Error playing sound:', e));
                     });
             }
         };

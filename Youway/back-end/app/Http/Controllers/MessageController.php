@@ -114,7 +114,7 @@ class MessageController extends Controller
             $message->message = $request->message;
             $message->save();
             
-            broadcast(new MessageSent($message))->toOthers();
+            event(new MessageSent($message));
             
             return response()->json($message, 201);
         } catch (\Exception $e) {
