@@ -8,4 +8,10 @@ window.Echo = new Echo({
     key: '14093af63cb0b67fb854',
     cluster: 'eu',
     forceTLS: true,
+    authEndpoint: "/broadcasting/auth",
+    auth: {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    }
 });
