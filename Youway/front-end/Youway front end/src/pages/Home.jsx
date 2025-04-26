@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import heroimg from "/src/assets/placeholder.png";
 
-import smilingstudent from '../assets/technology 1.png';
-import tv from '../assets/tvhome.svg';
-import hwjala from '../assets/hawjala.svg';
-import telescope from '../assets/telescope.png';
-import Footer  from '../Layouts/Footer';
-import imily from '../assets/imily.png';
+import smilingstudent from '/src/assets/technology 1.png';
+import tv from '/src/assets/tvhome.svg';
+import hwjala from '/src/assets/hawjala.svg';
+import telescope from '/src/assets/telescope.png';
+import Footer  from '/src/Layouts/Footer';
+import imily from '/src/assets/imily.png';
 
 export default function Home() {
   return (
