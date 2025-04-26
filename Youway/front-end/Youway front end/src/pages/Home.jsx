@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import heroimg from '../assets/placeholder.png';
+import heroimg from "/src/assets/placeholder.png";
+
 import smilingstudent from '../assets/technology 1.png';
 import tv from '../assets/tvhome.svg';
 import hwjala from '../assets/hawjala.svg';
