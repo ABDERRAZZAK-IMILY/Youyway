@@ -80,7 +80,7 @@ export default function Sidebar() {
           className="text-gray-700 focus:outline-none"
         >
           {isOpen ? (
-            <span className="block text-2xl leading-none">&times;</span>
+            <span className="block text-2xl leading-none">&times;</span> 
           ) : (
             <span className="block text-2xl leading-none">&#9776;</span> 
           )}

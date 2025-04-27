@@ -75,7 +75,7 @@ Route::middleware('auth:api')->group(function () {
     */
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications', [NotificationController::class, 'store']);
-    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::patch('/notifications/read', [NotificationController::class, 'markAsRead']);
 
     /*
     | Admin Routes
@@ -100,3 +100,8 @@ Route::middleware('auth:api')->group(function () {
     */
     Route::get('agora/token', [\App\Http\Controllers\AgoraController::class, 'getToken']);
 });
+
+
+use App\Http\Controllers\ChatController;
+
+Route::post('/chat', [ChatController::class, 'chat']);

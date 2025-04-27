@@ -29,10 +29,14 @@ class MessageSent implements ShouldBroadcastNow
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
+   
+
     public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel("message.{$this->message->recipient_id}"),
-        ];
-    }
+{
+    return [
+        new PrivateChannel("message.{$this->message->recipient_id}"),
+        new PrivateChannel("message.{$this->message->sender_id}"),
+    ];
+}
+
 }
