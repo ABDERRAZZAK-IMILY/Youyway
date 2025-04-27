@@ -6,7 +6,6 @@ import Register from "../pages/Register";
 
 import Inbox from "../pages/Inbox";
 
-import TestAgoraComponent  from "../pages/VideoCall";
 import DashboardLayout from "../components/Layout/DashboardLayout";
 
 
@@ -40,9 +39,5 @@ export const router = createBrowserRouter([
     {
         path : "/inbox",
         element : <Inbox/>
-    },
-    {
-        path : "/agora",
-        element : <TestAgoraComponent/>
     }
 ]);
