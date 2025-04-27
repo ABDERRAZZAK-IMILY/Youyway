@@ -69,7 +69,12 @@ export default function Register() {
                 
                 if (response.status === 200 || response.status === 201) {
                     console.log('Registration successful');
-                    navigate('/login');
+                    
+                    localStorage.setItem('token', response.data.authorization.token);
+                    localStorage.setItem('name', response.data.user.name);
+                    localStorage.setItem('userRole', response.data.user.role);
+                    
+                    navigate('/complete-profile');
                 } else {
                     setErrors({ submit: response.data.message || 'Registration failed' });
                 }
