@@ -7,6 +7,7 @@ import CompleteProfile from "../pages/CompleteProfile";
 import Inbox from "../pages/Inbox";
 
 import DashboardLayout from "../components/Layout/DashboardLayout";
+import MentoreDashboard from "../pages/Mentor/MentoreDashboard";
 
 
 export const router = createBrowserRouter([
@@ -43,5 +44,11 @@ export const router = createBrowserRouter([
     {
         path : "/inbox",
         element : <Inbox/>
+    }
+
+,
+    {
+        path : '/mentor',
+        element : <MentoreDashboard/>
     }
 ]);
