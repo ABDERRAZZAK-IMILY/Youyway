@@ -31,8 +31,8 @@ export default function Inbox() {
                 
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching inbox data:', error);
-                setError('Failed to load inbox data. Please try again.');
+                console.error('error fetching inbox data:', error);
+                setError('failed to load inbox data. Please try again.');
                 setLoading(false);
             }
         };
@@ -56,22 +56,22 @@ export default function Inbox() {
     const getMessages = async () => {
         try {
             if (!selectedUserRef.current || !selectedUserRef.current.id) {
-                console.error('No selected user');
+                console.error('no selected user');
                 return;
             }
             
             const response = await axiosClient.get(`/messages/${selectedUserRef.current.id}`);
             setCurrentMessages(response.data);
         } catch (error) {
-            console.error('Error fetching messages:', error);
+            console.error('error fetching messages:', error);
             
             if (error.response && error.response.status === 401) {
-                setError('Authentication error. Please log in again.');
+                setError(' errore 401 Please log in again.');
             } else {
-                const errorMessage = error.response?.data?.message || 'Unknown error occurred';
-                setError(`Failed to load messages: ${errorMessage}`);
+                const errorMessage = error.response?.data?.message;
+                setError(`failed to load messages: ${errorMessage}`);
             }
-        }
+        } 
     };
 
     useEffect(() => {
@@ -126,6 +126,11 @@ export default function Inbox() {
         };
     }, [webSocketChannel]);
 
+    const formatTime = (date) => {
+        const d = new Date(date);
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
     if (loading) {
         return (
             <div className="h-screen flex items-center justify-center">
@@ -153,85 +158,98 @@ export default function Inbox() {
     return (
         <div>
             <div className="h-screen flex bg-gray-100" style={{height:'90vh'}}>
-                {/* Sidebar */}
-                <div className="w-1/4 bg-white border-r border-gray-200">
-                    <div className="p-4 bg-gray-100 font-bold text-lg border-b border-gray-200">
+                {/* sidebar */}
+                <div className="w-1/4 bg-white border-r border-gray-200 flex flex-col">
+                    <div className="p-4 bg-gray-50 font-bold text-lg border-b border-gray-200">
                         Inbox
                     </div>
-                    <div className="p-4 space-y-4">
-                        {userData.users.map((user, key) => (
-                            <div
-                                key={key}
-                                onClick={()=>setSelectedUser(user)}
-                                className={`flex items-center ${user.id == selectedUser?.id ? 'bg-blue-500 text-white' : ''} p-2 hover:bg-blue-500 hover:text-white rounded cursor-pointer`}
-                            >
-                                <div className="w-12 h-12 bg-blue-200 rounded-full"></div>
-                                <div className="ml-4">
-                                    <div className="font-semibold">{user.name}</div>
+                    <div className="flex-1 overflow-y-auto">
+                        <div className="p-4 space-y-3">
+                            {userData.users.map((user, key) => (
+                                <div
+                                    key={key}
+                                    onClick={()=>setSelectedUser(user)}
+                                    className={`flex items-center ${user.id == selectedUser?.id ? 'bg-indigo-600 text-white' : ''} p-2 hover:bg-indigo-600 hover:text-white rounded-lg cursor-pointer transition-colors duration-200`}
+                                >
+                                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        {user.avatar ? (
+                                            <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-gray-500 text-lg">{user.name.charAt(0).toLowerCase()}</span>
+                                        )}
+                                    </div>
+                                    <div className="ml-3 overflow-hidden">
+                                        <div className="font-semibold truncate">{user.name}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Chat Area */}
                 <div className="flex flex-col w-3/4">
                     {!selectedUser &&
-                        <div className=' h-full flex justify-center items-center text-gray-800 font-bold'>
+                        <div className='h-full flex justify-center items-center text-gray-800 font-bold'>
                             Select Conversation
                         </div>
                     }
                     {selectedUser &&
                         <>
-                        {/* Chat Header */}
-                        <div className="p-4 border-b border-gray-200 flex items-center">
-                            <div className="w-12 h-12 bg-blue-200 rounded-full"></div>
-                            <div className="ml-4">
+                        <div className="p-4 border-b border-gray-200 flex items-center bg-white">
+                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                                {selectedUser.avatar ? (
+                                    <img src={selectedUser.avatar} alt={selectedUser.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-gray-500 text-lg">{selectedUser.name.charAt(0).toLowerCase()}</span>
+                                )}
+                            </div>
+                            <div className="ml-3">
                                 <div className="font-bold">{selectedUser?.name}</div>
                             </div>
                         </div>
 
-                        {/* Chat Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-50">
                             {currentMessages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`flex ${message.sender_id  == userData.auth.user.id ? "justify-end" : "justify-start"}`}
+                                    className={`flex flex-col ${message.sender_id == userData.auth.user.id ? "items-end" : "items-start"}`}
                                 >
                                     <div
                                         className={`${
-                                            message.recipient_id  == userData.auth.user.id
+                                            message.recipient_id == userData.auth.user.id
                                             ? "bg-gray-200 text-gray-800"
-                                            : "bg-blue-500 text-white"
-                                        } p-3 rounded-lg max-w-xs`}
+                                            : "bg-indigo-600 text-white"
+                                        } px-4 py-2 rounded-2xl max-w-xs`}
                                     >
                                         {message.message}
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-1 px-2">
+                                        {formatTime(message.created_at || new Date())}
                                     </div>
                                 </div>
                             ))}
                             <span ref={targetScrollRef}></span>
                         </div>
 
-                        {/* Message Input */}
                         <div className="p-4 bg-white border-t border-gray-200">
                             <div className="flex items-center">
                                 <input
                                     type="text"
                                     placeholder="Type a message..."
-                                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     value={messageInput}
                                     onChange={(e)=>setMessageInput(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                                 />
                                 <button 
                                     onClick={sendMessage}
-                                    className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                    className="ml-3 px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     Send
                                 </button>
                             </div>
                         </div>
                         </>
                     }
-                     
                 </div>
             </div>
         </div>
