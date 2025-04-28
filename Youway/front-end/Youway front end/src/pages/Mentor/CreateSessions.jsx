@@ -6,9 +6,6 @@ export default function SessionCreate() {
 
   const MentoreId = localStorage.getItem("userId");
 
-
-
-
   console.log(MentoreId);
 
   const [students, setStudents] = useState([]);

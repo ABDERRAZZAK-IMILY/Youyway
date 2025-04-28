@@ -95,13 +95,15 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/sessions/{session}/evaluation', [SessionController::class, 'show']);
     Route::put('/sessions/{session}/evaluation', [SessionController::class, 'update']);
 
+
     /*
-    | Agora Token Route
+    | student Routes
     */
-    Route::get('agora/token', [\App\Http\Controllers\AgoraController::class, 'getToken']);
+
+
+    Route::apiResource('student', StudentController::class);
+    
+
 });
 
 
-use App\Http\Controllers\ChatController;
-
-Route::post('/chat', [ChatController::class, 'chat']);

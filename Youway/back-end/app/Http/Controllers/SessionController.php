@@ -10,10 +10,11 @@ use App\Notifications\SessionScheduledNotification;
 class SessionController extends Controller
 {
     public function index()
-    {
-        $sessions = Session::all();
-        return response()->json($sessions);
-    }
+{
+    $sessions = Session::with(['student.user', 'mentor.user'])->get();
+    return response()->json($sessions);
+}
+
 
     public function store(Request $request)
     {
@@ -23,6 +24,7 @@ class SessionController extends Controller
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
             'status' => 'nullable|string',
+            'call_link' => 'required|string'
         ]);
 
         $session = Session::create($validatedData);

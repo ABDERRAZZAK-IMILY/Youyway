@@ -16,8 +16,8 @@ class Session extends Model
         'end_time',
         'status',
         'request_status',
-         'scheduled_at',
-          'call_link',
+        'scheduled_at',
+        'call_link',
     ];
 
     public function mentor()
