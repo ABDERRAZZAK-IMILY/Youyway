@@ -18,6 +18,7 @@ export default function SessionCreate() {
       const studentsRes = await axiosClient.get('/students');
 
       setStudents(studentsRes.data);
+      console.log(studentsRes.data);
     } catch (err) {
       console.log('error fetching data:');
     }
