@@ -74,14 +74,17 @@ export default function SessionListWithActions() {
               <p className="text-gray-600">
                 <strong>Request Status:</strong> {session.request_status}
               </p>
-              <a
-                href={session.call_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block text-indigo-600 hover:underline text-sm"
-              >
-                Join Call
-              </a>
+              {session.request_status === "accepted" && (
+  <a
+    href={session.call_link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="mt-2 inline-block text-indigo-600 hover:underline text-sm"
+  >
+    Join Call
+  </a>
+)}
+
             </div>
 
             <div className="flex gap-2 mt-4">
