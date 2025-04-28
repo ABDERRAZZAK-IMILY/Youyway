@@ -4,22 +4,32 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SessionCreate() {
 
-  const MentoreId = localStorage.getItem("userId")
+  const MentoreId = localStorage.getItem("userId");
+
+
+
+
+  console.log(MentoreId);
+
   const [students, setStudents] = useState([]);
   const [form, setForm] = useState({
     mentor_id : MentoreId,
+    student_id : '',
     start_time: '',
     end_time: '',
   });
+
+  console.log(form);
   const navigate = useNavigate();
 
+   
   const fetchStudents = async () => {
     try {
       const studentsRes = await axiosClient.get('/students');
 
       setStudents(studentsRes.data);
       console.log(studentsRes.data);
-    } catch (err) {
+    } catch {
       console.log('error fetching data:');
     }
   };
@@ -63,7 +73,7 @@ export default function SessionCreate() {
           >
             <option value="">Select a Student</option>
             {students.map((student) => (
-              <option  className="text-gray-800" key={student.id} value={student.name}>
+              <option  className="text-gray-800" key={student.id} value={student.id}>
                 {student.user?.name}
               </option>
             ))}
