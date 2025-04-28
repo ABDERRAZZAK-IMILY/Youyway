@@ -37,8 +37,18 @@ export const router = createBrowserRouter([
     },
     {
 
-        path : '/dash',
-        element : <DashboardLayout/>
+        
+        element : <DashboardLayout/>,
+
+        children :  [
+
+
+            {
+                path : '/mentor',
+                element : <MentoreDashboard/>
+            }
+
+        ]
     },
 
     {
@@ -46,9 +56,6 @@ export const router = createBrowserRouter([
         element : <Inbox/>
     }
 
-,
-    {
-        path : '/mentor',
-        element : <MentoreDashboard/>
-    }
+
+  
 ]);

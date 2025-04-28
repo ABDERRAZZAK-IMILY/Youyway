@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { axiosClient } from "../../api/axios";
 
-export default function SessionListWithActions() {
+export default function SessionMange() {
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState("");
 
