@@ -12,15 +12,20 @@ const menuItems = [
     to: '/dashboard',
   },
   {
-    name: 'Sessions',
+    name: 'Mange Sessions',
     icon: <MdOutlineMeetingRoom size={20} />,
-    to: '/sessions',
+    to: '/SessionMange',
   },
   {
     name: 'Users',
     icon: <BsFillPeopleFill size={20} />,
     to: '/users',
   },
+  {
+    name : 'Create Session',
+    icon: <BsFillPeopleFill size={20} />,
+    to : '/create Session'
+  }
 ];
 
 export default function Sidebar() {

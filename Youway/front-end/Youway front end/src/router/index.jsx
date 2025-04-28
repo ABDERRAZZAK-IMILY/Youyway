@@ -7,8 +7,10 @@ import CompleteProfile from "../pages/CompleteProfile";
 import Inbox from "../pages/Inbox";
 
 import DashboardLayout from "../components/Layout/DashboardLayout";
-import MentoreDashboard from "../pages/Mentor/MentoreDashboard";
 
+import SessionMange from "../pages/Mentor/SessionsMange";
+
+import SessionCreate from "../pages/Mentor/CreateSessions";
 
 export const router = createBrowserRouter([
     {
@@ -44,8 +46,14 @@ export const router = createBrowserRouter([
 
 
             {
-                path : '/mentor',
-                element : <MentoreDashboard/>
+                path : '/sessionmange',
+                element : <SessionMange/>
+            },
+
+            {
+                path : '/createsession',
+
+                element : <SessionCreate/>
             }
 
         ]
