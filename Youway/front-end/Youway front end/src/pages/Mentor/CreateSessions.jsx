@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { axiosClient } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function SessionCreate() {
 
   const MentoreId = localStorage.getItem("userId");
@@ -14,6 +15,7 @@ export default function SessionCreate() {
     student_id : '',
     start_time: '',
     end_time: '',
+    call_link : "https://meet.jit.si/" + Math.random().toString(36).substring(2, 15),
   });
 
   console.log(form);
