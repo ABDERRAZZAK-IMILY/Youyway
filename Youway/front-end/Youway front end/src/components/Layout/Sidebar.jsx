@@ -24,7 +24,7 @@ const menuItems = [
   {
     name : 'Create Session',
     icon: <BsFillPeopleFill size={20} />,
-    to : '/create Session'
+    to : '/createsession'
   }
 ];
 
