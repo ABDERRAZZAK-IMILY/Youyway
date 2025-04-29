@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function SessionCreate() {
-
-  const MentoreId = localStorage.getItem("userId");
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const MentoreId = userData.id;
 
   console.log(MentoreId);
 
@@ -15,7 +15,7 @@ export default function SessionCreate() {
     student_id : '',
     start_time: '',
     end_time: '',
-    call_link : "https://meet.jit.si/" + Math.random().toString(36).substring(2, 15),
+    call_link : "https://meet.jit.si/" + Math.random().toString(36),
   });
 
   console.log(form);
