@@ -117,4 +117,19 @@ class SessionController extends Controller
             'session' => $session->load(['mentor.user', 'student.user'])
         ]);
     }
+
+ 
+    public function Booksession(Request $request, Session $session){
+   
+        $validatedData = $request->validate(['student_id' =>  'required|exists:mentors,id']);
+       
+        $session->update($validatedData);
+
+        return response()->json(['message' => 'session booked succse']);
+
+    }
+
+
+
+
 }
