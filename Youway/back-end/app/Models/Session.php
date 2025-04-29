@@ -11,7 +11,6 @@ class Session extends Model
 
     protected $fillable = [
         'mentor_id',
-        'student_id',
         'start_time',
         'end_time',
         'status',

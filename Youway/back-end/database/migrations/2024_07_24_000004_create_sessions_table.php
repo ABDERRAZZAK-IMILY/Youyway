@@ -14,10 +14,6 @@ return new class extends Migration
             ->constrained('mentors')
             ->cascadeOnDelete();
 
-            $table->foreignId('student_id')
-            ->constrained('students')
-            ->cascadeOnDelete();
-
             $table->timestamp('start_time');
             $table->timestamp('end_time');
             $table->string('status')->default('pending');

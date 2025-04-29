@@ -9,10 +9,8 @@ export default function SessionCreate() {
 
   console.log(MentoreId);
 
-  const [students, setStudents] = useState([]);
   const [form, setForm] = useState({
     mentor_id : MentoreId,
-    student_id : '',
     start_time: '',
     end_time: '',
     call_link : "https://meet.jit.si/" + Math.random().toString(36),
@@ -20,22 +18,6 @@ export default function SessionCreate() {
 
   console.log(form);
   const navigate = useNavigate();
-
-   
-  const fetchStudents = async () => {
-    try {
-      const studentsRes = await axiosClient.get('/students');
-
-      setStudents(studentsRes.data);
-      console.log(studentsRes.data);
-    } catch {
-      console.log('error fetching data:');
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
 
   const handleChange = (e) => {
     setForm({
@@ -61,24 +43,6 @@ export default function SessionCreate() {
 
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1 font-medium">Student</label>
-          <select
-            name="student_id"
-            value={form.student_id}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          >
-            <option value="">Select a Student</option>
-            {students.map((student) => (
-              <option  className="text-gray-800" key={student.id} value={student.id}>
-                {student.user?.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div>
           <label className="block mb-1 font-medium">Start Time</label>
           <input

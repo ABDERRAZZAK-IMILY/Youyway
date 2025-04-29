@@ -20,7 +20,6 @@ class SessionController extends Controller
     {
         $validatedData = $request->validate([
             'mentor_id' => 'required|exists:mentors,id',
-            'student_id' => 'required|exists:students,id',
             'start_time' => 'required|date',
             'end_time' => 'required|date|after:start_time',
             'status' => 'nullable|string',
@@ -44,7 +43,6 @@ class SessionController extends Controller
     {
         $validatedData = $request->validate([
             'mentor_id' => 'exists:mentors,id',
-            'student_id' => 'exists:students,id',
             'start_time' => 'date',
             'end_time' => 'date|after:start_time',
             'status' => 'nullable|string',
@@ -87,7 +85,7 @@ class SessionController extends Controller
         $session->update([
             'request_status' => 'scheduled',
             'scheduled_at' => $validatedData['scheduled_at'],
-            'call_link' => url("/video/session/{$session->id}")
+            'call_link' => url("/session/{$session->id}")
         ]);
 
         $session->student->notify(new SessionScheduledNotification($session));
