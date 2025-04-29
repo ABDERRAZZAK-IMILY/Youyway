@@ -25,6 +25,9 @@ return new class extends Migration
             $table->dateTime('scheduled_at')->nullable()->after('request_status');
             $table->string('call_link')->nullable()->after('scheduled_at');
             $table->timestamps();
+            $table->string('title')->after('id');
+            $table->text('description')->nullable()->after('title');
+            $table->string('image_path')->nullable()->after('call_link');
         });
     }
 
