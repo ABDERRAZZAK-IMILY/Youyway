@@ -6,6 +6,7 @@ use App\Models\Session;
 use Illuminate\Http\Request;
 use App\Notifications\SessionAcceptedNotification;
 use App\Notifications\SessionScheduledNotification;
+use Illuminate\Support\Facades\Storage;
 
 class SessionController extends Controller
 {
@@ -16,47 +17,63 @@ class SessionController extends Controller
 }
 
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'mentor_id' => 'required|exists:mentors,id',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
-            'status' => 'nullable|string',
-            'call_link' => 'required|string'
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'mentor_id'   => 'required|exists:mentors,id',
+        'start_time'  => 'required|date',
+        'end_time'    => 'required|date|after:start_time',
+        'call_link'   => 'required|string',
+        'title'       => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'image'       => 'nullable|image|max:2048',
+    ]);
 
-        $session = Session::create($validatedData);
-
-        return response()->json([
-            'message' => 'Session successfully created',
-            'session' => $session,
-        ], 201);
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('session_images', 'public');
+        $validated['image_path'] = $path;
     }
+
+    $session = Session::create($validated);
+
+    return response()->json([
+        'message' => 'Session created successfully',
+        'session' => $session,
+    ], 201);
+}
+
+public function update(Request $request, Session $session)
+{
+    $validated = $request->validate([
+        'start_time'     => 'date',
+        'end_time'       => 'date|after:start_time',
+        'request_status' => 'in:pending,accepted,rejected',
+        'title'          => 'string|max:255',
+        'description'    => 'nullable|string',
+        'image'          => 'nullable|image|max:2048',
+    ]);
+
+    if ($request->hasFile('image')) {
+        if ($session->image_path) {
+            Storage::disk('public')->delete($session->image_path);
+        }
+        $validated['image_path'] = $request->file('image')->store('session_images', 'public');
+    }
+
+    $session->update($validated);
+
+    return response()->json([
+        'message' => 'Session updated successfully',
+        'session' => $session,
+    ], 200);
+}
 
     public function show(Session $session)
     {
         return response()->json($session);
     }
 
-    public function update(Request $request, Session $session)
-    {
-        $validatedData = $request->validate([
-            'mentor_id' => 'exists:mentors,id',
-            'start_time' => 'date',
-            'end_time' => 'date|after:start_time',
-            'status' => 'nullable|string',
-            'request_status' => 'in:pending,accepted,rejected',
-        ]);
-
-        $session->update($validatedData);
-
-        return response()->json([
-            'message' => 'Session successfully updated',
-            'session' => $session,
-        ], 200);
-    }
-
+   
     public function destroy(Session $session)
     {
         $session->delete();
