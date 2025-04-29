@@ -5,15 +5,24 @@ export default function SessionMange() {
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState("");
 
+
+
   const fetchSessions = async () => {
     try {
-      const response = await axiosClient.get("/sessions");
-      setSessions(response.data);
+        const response = await axiosClient.get("/sessions");
+        
+        const filterSessions = response.data.filter(session => session.student_id !== null);
+
+        setSessions(filterSessions);
+        console.log(filterSessions);
     } catch (err) {
-      console.error("eror fetching sessions:", err);
-      setError("failed to load sessions");
+        console.error("error fetch session:", err);
+        setError("errore load sessions");
     }
-  };
+};
+
+
+ 
 
   useEffect(() => {
     fetchSessions();
