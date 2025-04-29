@@ -7,6 +7,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Auth;
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/messages', [MessageController::class, 'index']);
     
@@ -102,6 +104,17 @@ Route::middleware('auth:api')->group(function () {
 
 
     Route::apiResource('student', StudentController::class);
+    
+
+
+    Route::get('/my-mentor', function () {
+        $user = Auth::user();
+        $mentor = $user->mentor;
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor not found'], 404);
+        }
+        return response()->json($mentor);
+    })->middleware('auth:api');
     
 
 });
