@@ -2,21 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { axiosClient } from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function SessionCreate() {
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const MentoreId = userData.id;
-
-  console.log(MentoreId);
-
   const [form, setForm] = useState({
-    mentor_id : MentoreId,
+    mentor_id: null,
     start_time: '',
     end_time: '',
-    call_link : "https://meet.jit.si/" + Math.random().toString(36),
+    call_link: "https://meet.jit.si/" + Math.random().toString(36),
   });
 
-  console.log(form);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,21 +19,41 @@ export default function SessionCreate() {
     });
   };
 
+  useEffect(() => {
+    const fetchMentor = async () => {
+      try {
+        const response = await axiosClient.get('/my-mentor');
+        setForm(prevForm => ({
+          ...prevForm,
+          mentor_id: response.data.id
+        }));
+      } catch (error) {
+        console.log("Mentor not found", error);
+      }
+    };
+
+    fetchMentor();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!form.mentor_id) {
+      console.log("Mentor ID not loaded yet.");
+      return;
+    }
 
     try {
       await axiosClient.post('/sessions', form);
       navigate('/mentor');
-    } catch {
-      console.log('error created session:');
+    } catch (error) {
+      console.log('error created session:', error);
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Create New Session</h2>
-
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
