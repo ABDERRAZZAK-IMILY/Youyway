@@ -15,8 +15,10 @@ return new class extends Migration
             ->cascadeOnDelete();
 
             $table->foreignId('student_id')
+            ->nullable()
             ->constrained('students')
             ->cascadeOnDelete();
+      
 
             $table->timestamp('start_time');
             $table->timestamp('end_time');
@@ -33,6 +35,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('session');
+        Schema::dropIfExists('sessions');
     }
 };
