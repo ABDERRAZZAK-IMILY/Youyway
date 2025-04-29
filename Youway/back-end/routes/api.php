@@ -120,6 +120,16 @@ Route::middleware('auth:api')->group(function () {
     })->middleware('auth:api');
     
 
+    Route::get('/my-student', function () {
+        $user = Auth::user();
+        $mentor = $user->student;
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor not found'], 404);
+        }
+        return response()->json($mentor);
+    })->middleware('auth:api');
+
+
 });
 
 
