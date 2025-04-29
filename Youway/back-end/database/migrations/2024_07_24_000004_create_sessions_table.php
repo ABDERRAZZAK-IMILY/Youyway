@@ -10,8 +10,14 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mentor_id')->constrained('users');
-            $table->foreignId('student_id')->constrained('users');
+  $table->foreignId('mentor_id')
+  ->constrained('mentors')
+  ->cascadeOnDelete();
+
+$table->foreignId('student_id')
+  ->constrained('students')
+  ->cascadeOnDelete();
+
             $table->timestamp('start_time');
             $table->timestamp('end_time');
             $table->string('status')->default('pending');

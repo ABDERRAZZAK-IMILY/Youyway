@@ -69,7 +69,6 @@ export default function Register() {
                 
                 if (response.status === 200 || response.status === 201) {
                     console.log('Registration successful');
-                    
                     localStorage.setItem('token', response.data.authorization.token);
                     localStorage.setItem('name', response.data.user.name);
                     localStorage.setItem('userRole', response.data.user.role);
