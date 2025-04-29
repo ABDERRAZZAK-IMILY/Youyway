@@ -15,6 +15,9 @@ export default function SessionApponiment() {
     console.log(book);
 
 
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +32,13 @@ export default function SessionApponiment() {
   }, []);
 
 
+  const handleSubmit =  async () => {
+   
+    const response = await axiosClient.post('')
 
+
+
+  }
 
 
 
@@ -40,6 +49,18 @@ export default function SessionApponiment() {
 <img src={`http://localhost:80/storage/${s.image_path}`} alt={s.title} className="session-image" />
 <h3>{s.title}</h3>
           <p>{s.description}</p>
+
+
+  <form onSubmit={handleSubmit}  >
+
+<button type="submit">book session</button>
+
+
+
+  </form>
+
+
+
         </div>
       ))}
     </>

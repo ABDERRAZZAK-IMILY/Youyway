@@ -136,15 +136,21 @@ public function update(Request $request, Session $session)
     }
 
  
-    public function Booksession(Request $request, Session $session){
-   
-        $validatedData = $request->validate(['student_id' =>  'required|exists:mentors,id']);
-       
-        $session->update($validatedData);
-
-        return response()->json(['message' => 'session booked succse']);
-
+    public function Booksession(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'session_id' => 'required|exists:sessions,id',
+        ]);
+    
+        $session = Session::find($validatedData['session_id']);
+    
+        $session->student_id = $validatedData['student_id'];
+        $session->save();
+    
+        return response()->json(['message' => 'Session booked successfully']);
     }
+    
 
 
 
