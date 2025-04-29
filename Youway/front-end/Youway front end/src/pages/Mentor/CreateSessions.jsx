@@ -14,7 +14,6 @@ export default function SessionCreate() {
   });
   const navigate = useNavigate();
 
-  // Handle input & file changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm(prev => ({
@@ -23,19 +22,17 @@ export default function SessionCreate() {
     }));
   };
 
-  // Fetch mentor ID once on mount
   useEffect(() => {
     axiosClient.get('/my-mentor')
       .then(res => setForm(prev => ({ ...prev, mentor_id: res.data.id })))
       .catch(err => console.error('Mentor not found', err));
   }, []);
 
-  // Submit the form
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.mentor_id) return;
 
-    // Build FormData, only append non-null fields
+ 
     const data = new FormData();
     Object.entries(form).forEach(([key, value]) => {
       if (value !== null) {

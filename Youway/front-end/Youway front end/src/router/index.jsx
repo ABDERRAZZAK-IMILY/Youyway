@@ -12,6 +12,8 @@ import SessionMange from "../pages/Mentor/SessionsMange";
 
 import SessionCreate from "../pages/Mentor/CreateSessions";
 
+import SessionApponiment from "../pages/Student/SessionApponiment";
+
 export const router = createBrowserRouter([
     {
    
@@ -62,6 +64,13 @@ export const router = createBrowserRouter([
     {
         path : "/inbox",
         element : <Inbox/>
+    }
+,
+    {
+      path : "/sesssion" ,
+
+      element : <SessionApponiment/>
+
     }
 
 
