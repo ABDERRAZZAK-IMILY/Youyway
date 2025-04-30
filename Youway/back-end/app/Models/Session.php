@@ -20,7 +20,6 @@ class Session extends Model
         'call_link',
         'title',      
         'description', 
-        'image_path', 
     ];
 
     public function mentor()

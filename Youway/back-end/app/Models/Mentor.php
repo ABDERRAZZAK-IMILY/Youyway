@@ -16,6 +16,7 @@ class Mentor extends Model
         'disponibilites',
         'domaine',
         'university',
+        'image_path', 
     ];
 
     public function user()
