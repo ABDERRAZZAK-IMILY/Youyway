@@ -29,7 +29,6 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title')->after('id');
             $table->text('description')->nullable()->after('title');
-            $table->string('image_path')->nullable()->after('call_link');
         });
     }
 

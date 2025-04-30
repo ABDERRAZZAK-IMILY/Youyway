@@ -20,6 +20,7 @@ class CreateMentorsTable extends Migration
             $table->string('disponibilites')->nullable();
             $table->string('domaine')->nullable();
             $table->string('university')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }
