@@ -4,9 +4,7 @@ import { axiosClient } from "../../api/axios";
 export default function SessionMange() {
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState("");
-
-
-
+  
   const fetchSessions = async () => {
     try {
         const response = await axiosClient.get("/sessions");

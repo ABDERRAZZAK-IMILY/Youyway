@@ -9,7 +9,7 @@ const menuItems = [
   {
     name: 'Home',
     icon: <AiFillHome size={20} />,
-    to: '/dashboard',
+    to: '/mentordashboard',
   },
   {
     name: 'Mange Sessions',

@@ -16,6 +16,8 @@ import SessionApponiment from "../pages/Student/SessionApponiment";
 
 import Mentor from "../pages/Mentors";
 
+import MentorDashboard from "../pages/Mentor/MentoreDashboard";
+
 export const router = createBrowserRouter([
     {
    
@@ -58,6 +60,13 @@ export const router = createBrowserRouter([
                 path : '/book-session/:mentorId',
 
                 element : <SessionCreate/>
+            }
+
+            , {
+
+                path : '/mentordashboard',
+
+                element :<MentorDashboard/>
             }
 
         ]
