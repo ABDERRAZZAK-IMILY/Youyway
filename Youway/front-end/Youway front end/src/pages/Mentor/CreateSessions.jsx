@@ -82,7 +82,7 @@ export default function SessionCreate() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6">Create New Session</h2>
+      <h2 className="text-3xl font-bold mb-6">BOOK SESSION</h2>
 
       {loading ? (
         <div className="text-center">
@@ -91,7 +91,7 @@ export default function SessionCreate() {
       ) : (
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
           <div>
-            <label className="block mb-1 font-medium">Title</label>
+            <label className="block mb-1 font-medium">Subject</label>
             <input
               type="text"
               name="title"
