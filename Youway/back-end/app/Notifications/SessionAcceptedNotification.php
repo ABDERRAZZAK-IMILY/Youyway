@@ -42,6 +42,7 @@ class SessionAcceptedNotification extends Notification
         return (new MailMessage)
             ->subject('Session Accepted')
             ->line('Your tutoring session request has been accepted.');
+            
     }
     
 }
