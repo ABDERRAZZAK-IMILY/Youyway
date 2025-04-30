@@ -123,7 +123,7 @@ export default function Mentor() {
 
             <div className="px-5 pb-5 pt-0">
               <Link
-                to={`/schedule-session?mentorId=${mentor.id}&mentorName=${encodeURIComponent(mentor.user.name)}`}
+                to={`/book-session/${mentor.id}`}
                 className="block w-full text-center bg-green-500 text-white font-medium py-2 rounded hover:bg-blue-600 transition"
               >
                 Planifier une session
