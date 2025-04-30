@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
             },
 
             {
-                path : '/book-session/:id',
+                path : '/book-session/:mentorId',
 
                 element : <SessionCreate/>
             }

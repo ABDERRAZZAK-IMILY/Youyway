@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { axiosClient } from '../../api/axios';
 import { useParams, useNavigate } from 'react-router-dom';
-
 import { jwtDecode } from 'jwt-decode';
-
 
 export default function SessionCreate() {
   const { mentorId } = useParams();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('token');
-
-  const studentId =  jwtDecode(token).sub;
-
-  console.log(studentId);
-  
-
   const [form, setForm] = useState({
-    mentor_id: mentorId,
-    student_id: studentId,
+    mentor_id: '',
+    student_id: '',
     title: '',
     description: '',
     start_time: '',
@@ -27,11 +18,33 @@ export default function SessionCreate() {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
 
+  // Load token and check mentorId, then set form data
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
 
+    try {
+      const studentId = jwtDecode(token).sub;
+ 
+      setForm(prev => ({
+        ...prev,
+        mentor_id: mentorId,
+        student_id: studentId,
+      }));
+      setLoading(false);  // Data is ready, allow form submission
+    } catch (e) {
+      console.error("Invalid token");
+      navigate('/login');
+    }
+  }, [mentorId, navigate]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
       [name]: value,
@@ -54,9 +67,11 @@ export default function SessionCreate() {
     });
 
     try {
+      setLoading(true);  // Show loading when submitting
       await axiosClient.post('/sessions', data);
       navigate('/mentor');
     } catch (err) {
+      setLoading(false);  // Hide loading if error occurs
       if (err.response?.data?.errors) {
         setErrors(err.response.data.errors);
         console.error('Validation errors:', err.response.data.errors);
@@ -70,71 +85,76 @@ export default function SessionCreate() {
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6">Create New Session</h2>
 
-      <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
-
-        {/* Title */}
-        <div>
-          <label className="block mb-1 font-medium">Title</label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
-          {errors.title && <p className="text-red-500">{errors.title[0]}</p>}
+      {loading ? (
+        <div className="text-center">
+          <p>Loading...</p>
         </div>
+      ) : (
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+          {/* Title */}
+          <div>
+            <label className="block mb-1 font-medium">Title</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+            {errors.title && <p className="text-red-500">{errors.title[0]}</p>}
+          </div>
 
-        {/* Description */}
-        <div>
-          <label className="block mb-1 font-medium">Description</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
-          {errors.description && <p className="text-red-500">{errors.description[0]}</p>}
-        </div>
+          {/* Description */}
+          <div>
+            <label className="block mb-1 font-medium">Description</label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="w-full border rounded p-2"
+            />
+            {errors.description && <p className="text-red-500">{errors.description[0]}</p>}
+          </div>
 
-        {/* Start Time */}
-        <div>
-          <label className="block mb-1 font-medium">Start Time</label>
-          <input
-            type="datetime-local"
-            name="start_time"
-            value={form.start_time}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
-          {errors.start_time && <p className="text-red-500">{errors.start_time[0]}</p>}
-        </div>
+          {/* Start Time */}
+          <div>
+            <label className="block mb-1 font-medium">Start Time</label>
+            <input
+              type="datetime-local"
+              name="start_time"
+              value={form.start_time}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+            {errors.start_time && <p className="text-red-500">{errors.start_time[0]}</p>}
+          </div>
 
-        {/* End Time */}
-        <div>
-          <label className="block mb-1 font-medium">End Time</label>
-          <input
-            type="datetime-local"
-            name="end_time"
-            value={form.end_time}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
-          {errors.end_time && <p className="text-red-500">{errors.end_time[0]}</p>}
-        </div>
+          {/* End Time */}
+          <div>
+            <label className="block mb-1 font-medium">End Time</label>
+            <input
+              type="datetime-local"
+              name="end_time"
+              value={form.end_time}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+            {errors.end_time && <p className="text-red-500">{errors.end_time[0]}</p>}
+          </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-        >
-          Create Session
-        </button>
-
-      </form>
+          {/* Submit */}
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Create Session'}
+          </button>
+        </form>
+      )}
     </div>
   );
 }
