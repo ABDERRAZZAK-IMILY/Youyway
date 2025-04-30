@@ -37,7 +37,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className={`h-screen bg-blue-500 border-r shadow-sm transition-all duration-300 flex flex-col ${
+    <div className={`h-screen bg-green-500 border-r shadow-sm transition-all duration-300 flex flex-col ${
       isOpen ? 'w-64' : 'w-20'
     }`}>
      
@@ -48,9 +48,9 @@ export default function Sidebar() {
           className="p-2 rounded-full hover:bg-gray-100 focus:outline-none"
         >
           {isOpen ? (
-            <FiChevronLeft size={20} className="text-gray-600" />
+            <FiChevronLeft size={20} className="text-gray-200" />
           ) : (
-            <FiChevronRight size={20} className="text-gray-600" />
+            <FiChevronRight size={20} className="text-gray-200" />
           )}
         </button>
       </div>
