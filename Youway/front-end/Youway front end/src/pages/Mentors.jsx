@@ -7,6 +7,8 @@ export default function Mentor() {
   const [mentors, setMentors] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     axiosClient
@@ -29,37 +31,57 @@ export default function Mentor() {
 
   const specialties = Array.from(new Set(mentors.map((m) => m.domaine)));
 
+  const totalPages = Math.ceil(filteredMentors.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentMentors = filteredMentors.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSpecialty("all");
+    setCurrentPage(1);
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="flex-grow relative">
-          <input
-            type="text"
-            placeholder="Rechercher par nom ou spécialité"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-          />
-        </div>
-        <div>
-          <select
-            value={specialty}
-            onChange={(e) => setSpecialty(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-          >
-            <option value="all">Toutes les spécialités</option>
-            {specialties.map((spec) => (
-              <option key={spec} value={spec}>
-                {spec}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button
-          onClick={() => {
-            setSearchQuery("");
-            setSpecialty("all");
+        <input
+          type="text"
+          placeholder="Rechercher par nom ou spécialité"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
           }}
+          className="w-full border rounded px-3 py-2"
+        />
+
+        <select
+          value={specialty}
+          onChange={(e) => {
+            setSpecialty(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="w-full md:w-60 border rounded px-3 py-2"
+        >
+          <option value="all">Toutes les spécialités</option>
+          {specialties.map((spec) => (
+            <option key={spec} value={spec}>
+              {spec}
+            </option>
+          ))}
+        </select>
+
+        <button
+          onClick={resetFilters}
           className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
         >
           Réinitialiser
@@ -67,7 +89,7 @@ export default function Mentor() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMentors.map((mentor) => (
+        {currentMentors.map((mentor) => (
           <div
             key={mentor.id}
             className="bg-white border-r-8 border-amber-500 rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg"
@@ -111,16 +133,45 @@ export default function Mentor() {
         ))}
       </div>
 
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-8 space-x-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
+          >
+            Précédent
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`px-3 py-1 border rounded ${
+                currentPage === page ? "bg-amber-500 text-white" : "hover:bg-gray-200"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 border rounded hover:bg-gray-200 disabled:opacity-50"
+          >
+            Suivant
+          </button>
+        </div>
+      )}
+
       {filteredMentors.length === 0 && (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">
             Aucun mentor ne correspond à votre recherche.
           </p>
           <button
-            onClick={() => {
-              setSearchQuery("");
-              setSpecialty("all");
-            }}
+            onClick={resetFilters}
             className="mt-2 text-blue-600 hover:underline"
           >
             Réinitialiser les filtres
