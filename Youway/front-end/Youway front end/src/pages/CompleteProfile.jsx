@@ -17,7 +17,8 @@ export default function CompleteProfile() {
     competences: '',
     disponibilites: '',
     domaine: '',
-    university: ''
+    university: '',
+    
   });
   
   const [studentForm, setStudentForm] = useState({
