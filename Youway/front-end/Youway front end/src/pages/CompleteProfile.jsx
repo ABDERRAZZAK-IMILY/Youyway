@@ -10,7 +10,7 @@ export default function CompleteProfile() {
   const [error, setError] = useState('');
   const [userRole, setUserRole] = useState('');
   const [userId, setUserId] = useState(null);
-  
+
   const [mentorForm, setMentorForm] = useState({
     user_id: '',
     bio: '',
@@ -18,9 +18,9 @@ export default function CompleteProfile() {
     disponibilites: '',
     domaine: '',
     university: '',
-    
+    image: null,
   });
-  
+
   const [studentForm, setStudentForm] = useState({
     user_id: '',
     level: '',
@@ -35,66 +35,60 @@ export default function CompleteProfile() {
       setLoading(false);
       return;
     }
-    
+
     try {
       const decoded = jwtDecode(token);
-      console.log('Decoded token:', decoded);
-      
       const userId = decoded.sub;
       setUserId(userId);
-      
+
       let role = decoded.role;
-      
       if (!role) {
-        console.log('Role not found in token, checking localStorage');
         role = localStorage.getItem('userRole');
       }
-      
+
       if (!role) {
-        console.log('Role not found in localStorage, fetching from API');
         axiosClient.get('/user')
           .then(response => {
-            console.log('User details:', response.data);
             role = response.data.role;
             localStorage.setItem('userRole', role);
             setUserRole(role);
-            
             if (role === 'Mentor') {
               setMentorForm(prev => ({ ...prev, user_id: userId }));
             } else if (role === 'Student') {
               setStudentForm(prev => ({ ...prev, user_id: userId }));
             }
-            
             setLoading(false);
           })
-          .catch(error => {
-            console.error('Error fetching user details:', error);
+          .catch(() => {
             setError('Failed to get user role. Please contact an administrator.');
             setLoading(false);
           });
-        return; 
+        return;
       }
-      
+
       setUserRole(role);
       localStorage.setItem('userRole', role);
-      
+
       if (role === 'Mentor') {
         setMentorForm(prev => ({ ...prev, user_id: userId }));
       } else if (role === 'Student') {
         setStudentForm(prev => ({ ...prev, user_id: userId }));
       }
-      
       setLoading(false);
+
     } catch (err) {
-      console.error('Error decoding token:', err);
       setError('Invalid authentication token. Please log in again.');
       setLoading(false);
     }
   }, []);
 
   const handleMentorChange = (e) => {
-    const { name, value } = e.target;
-    setMentorForm(prev => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      setMentorForm(prev => ({ ...prev, image: files[0] }));
+    } else {
+      setMentorForm(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleStudentChange = (e) => {
@@ -105,16 +99,24 @@ export default function CompleteProfile() {
   const handleMentorSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
-      console.log('Submitting mentor profile:', mentorForm);
-      const response = await axiosClient.post('/mentors', mentorForm);
-      
-      console.log('Mentor profile created:', response.data);
-      
+      const formData = new FormData();
+      Object.entries(mentorForm).forEach(([key, value]) => {
+        if (value !== null) {
+          formData.append(key, value);
+        }
+      });
+
+      const response = await axiosClient.post('/mentors', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
       navigate('/mentor');
     } catch (err) {
-      console.error('Error creating mentor profile:', err);
+      console.error(err);
       setError(err.response?.data?.message || 'Failed to create mentor profile. Please try again.');
     }
   };
@@ -122,16 +124,11 @@ export default function CompleteProfile() {
   const handleStudentSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
-      console.log('Submitting student profile:', studentForm);
       const response = await axiosClient.post('/students', studentForm);
-      
-      console.log('Student profile created:', response.data);
-      
       navigate('/student');
     } catch (err) {
-      console.error('Error creating student profile:', err);
       setError(err.response?.data?.message || 'Failed to create student profile. Please try again.');
     }
   };
@@ -150,19 +147,17 @@ export default function CompleteProfile() {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
           Complete Your {userRole} Profile
         </h2>
-        
+
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
           </div>
         )}
-        
+
         {userRole === 'Mentor' ? (
           <form onSubmit={handleMentorSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="bio">
-                Bio
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="bio">Bio</label>
               <textarea
                 id="bio"
                 name="bio"
@@ -173,11 +168,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
+
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="competences">
-                Competences
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="competences">Competences</label>
               <input
                 type="text"
                 id="competences"
@@ -188,11 +181,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
+
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="disponibilites">
-              disponibility
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="disponibilites">Disponibility</label>
               <input
                 type="text"
                 id="disponibilites"
@@ -203,11 +194,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
+
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="domaine">
-                Domain/Field
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="domaine">Domain/Field</label>
               <input
                 type="text"
                 id="domaine"
@@ -218,11 +207,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
-            <div className="mb-6">
-              <label className="block text-gray-700 mb-2" htmlFor="university">
-                University
-              </label>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2" htmlFor="university">University</label>
               <input
                 type="text"
                 id="university"
@@ -232,20 +219,26 @@ export default function CompleteProfile() {
                 onChange={handleMentorChange}
               />
             </div>
-            
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            >
+
+            <div className="mb-6">
+              <label className="block text-gray-700 mb-2" htmlFor="image">Profile Image</label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleMentorChange}
+              />
+            </div>
+
+            <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
               Complete Profile
             </button>
           </form>
         ) : userRole === 'Student' ? (
           <form onSubmit={handleStudentSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="level">
-                Education Level
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="level">Education Level</label>
               <input
                 type="text"
                 id="level"
@@ -256,11 +249,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
+
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="interests">
-                Interests
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="interests">Interests</label>
               <input
                 type="text"
                 id="interests"
@@ -271,11 +262,9 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
+
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2" htmlFor="school">
-                School/University
-              </label>
+              <label className="block text-gray-700 mb-2" htmlFor="school">School/University</label>
               <input
                 type="text"
                 id="school"
@@ -286,18 +275,13 @@ export default function CompleteProfile() {
                 required
               />
             </div>
-            
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            >
+
+            <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
               Complete Profile
             </button>
           </form>
         ) : (
-          <div className="text-center text-gray-600">
-            Unknown role. Please contact an administrator.
-          </div>
+          <div className="text-center text-gray-600">Unknown role. Please contact an administrator.</div>
         )}
       </div>
     </div>

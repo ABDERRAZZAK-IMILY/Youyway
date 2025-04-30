@@ -22,7 +22,7 @@ export default function Mentor() {
     <div className="mentors-container">
       {mentors.map((mentor) => (
         <div key={mentor.id} className="mentor-card">
-          <img src={`http://localhost:80/storage/${mentor.user.image_path}`} alt={mentor.user.name} className="mentor-image" />
+<img src={`http://localhost:80/storage/${mentor.image_path}`} alt={mentor.user.name} />
           <h3>{mentor.user.name}</h3>
           <p><strong>Competences:</strong> {mentor.competences}</p>
           <p><strong>Disponibilites:</strong> {mentor.disponibilites}</p>
