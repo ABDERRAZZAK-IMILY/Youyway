@@ -59,12 +59,12 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex items-center justify-between bg-white p-4 border-b">
-    <div className="text-2xl font-semibold">Youyway</div>
+    <header className="flex items-center justify-between bg-green-500  p-4 border-b">
+    <div className="text-4xl font-semibold">Youyway</div>
 
     <div className="flex items-center space-x-6">
       {user && (
-        <div className="flex items-center text-gray-700">
+        <div className="flex items-center text-white">
           <span>Hello, {localStorage.getItem("name")}</span>
 
           {notifications.length > 0 && (
