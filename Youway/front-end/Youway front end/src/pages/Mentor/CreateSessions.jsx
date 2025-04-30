@@ -2,37 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { axiosClient } from '../../api/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { jwtDecode } from 'jwt-decode';
+
+
 export default function SessionCreate() {
   const { mentorId } = useParams();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
+
+  const studentId =  jwtDecode(token).sub;
+
+  console.log(studentId);
+  
+
   const [form, setForm] = useState({
     mentor_id: mentorId,
-    student_id: null,
+    student_id: studentId,
     title: '',
     description: '',
     start_time: '',
     end_time: '',
     call_link: 'https://meet.jit.si/' + Math.random().toString(36),
-    image: null,
   });
 
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    // Fetch student id
-    axiosClient.get('/my-student')
-      .then(res => {
-        setForm(prev => ({ ...prev, student_id: res.data.id }));
-      })
-      .catch(err => console.error('Student not found', err));
-  }, []);
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: files ? files[0] : value,
+      [name]: value,
     }));
   };
 
@@ -96,19 +98,6 @@ export default function SessionCreate() {
           {errors.description && <p className="text-red-500">{errors.description[0]}</p>}
         </div>
 
-        {/* Image */}
-        <div>
-          <label className="block mb-1 font-medium">Image (optional)</label>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-            className="w-full"
-          />
-          {errors.image && <p className="text-red-500">{errors.image[0]}</p>}
-        </div>
-
         {/* Start Time */}
         <div>
           <label className="block mb-1 font-medium">Start Time</label>
@@ -135,20 +124,6 @@ export default function SessionCreate() {
             className="w-full border rounded p-2"
           />
           {errors.end_time && <p className="text-red-500">{errors.end_time[0]}</p>}
-        </div>
-
-        {/* Call Link */}
-        <div>
-          <label className="block mb-1 font-medium">Call Link</label>
-          <input
-            type="text"
-            name="call_link"
-            value={form.call_link}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
-          {errors.call_link && <p className="text-red-500">{errors.call_link[0]}</p>}
         </div>
 
         {/* Submit */}
