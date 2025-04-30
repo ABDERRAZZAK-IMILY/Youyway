@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mentor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MentorController extends Controller
 {
@@ -24,7 +25,14 @@ class MentorController extends Controller
             'disponibilites' => 'nullable|string',
             'domaine' => 'nullable|string',
             'university' => 'nullable|string',
+            'image'       => 'nullable|image|max:2048',
+
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('session_images', 'public');
+            $validatedData['image_path'] = $path;
+        }
     
         $mentor = Mentor::create($validatedData);
     
@@ -51,8 +59,18 @@ class MentorController extends Controller
             'disponibilites' => 'nullable|string',
             'domaine' => 'nullable|string',
             'university' => 'nullable|string',
+            'image'          => 'nullable|image|max:2048',
+
         ]);
     
+        if ($request->hasFile('image')) {
+            if ($mentor->image_path) {
+                Storage::disk('public')->delete($mentor->image_path);
+            }
+            $validatedData['image_path'] = $request->file('image')->store('session_images', 'public');
+        }
+
+
         $mentor->update($validatedData);
     
         return response()->json([

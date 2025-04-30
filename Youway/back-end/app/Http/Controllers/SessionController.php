@@ -6,7 +6,6 @@ use App\Models\Session;
 use Illuminate\Http\Request;
 use App\Notifications\SessionAcceptedNotification;
 use App\Notifications\SessionScheduledNotification;
-use Illuminate\Support\Facades\Storage;
 
 class SessionController extends Controller
 {
@@ -27,13 +26,9 @@ public function store(Request $request)
         'call_link'   => 'required|string',
         'title'       => 'required|string|max:255',
         'description' => 'nullable|string',
-        'image'       => 'nullable|image|max:2048',
     ]);
 
-    if ($request->hasFile('image')) {
-        $path = $request->file('image')->store('session_images', 'public');
-        $validated['image_path'] = $path;
-    }
+   
 
     $session = Session::create($validated);
 
@@ -51,15 +46,7 @@ public function update(Request $request, Session $session)
         'request_status' => 'in:pending,accepted,rejected',
         'title'          => 'string|max:255',
         'description'    => 'nullable|string',
-        'image'          => 'nullable|image|max:2048',
     ]);
-
-    if ($request->hasFile('image')) {
-        if ($session->image_path) {
-            Storage::disk('public')->delete($session->image_path);
-        }
-        $validated['image_path'] = $request->file('image')->store('session_images', 'public');
-    }
 
     $session->update($validated);
 
