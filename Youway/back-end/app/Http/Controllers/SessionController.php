@@ -20,7 +20,7 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'mentor_id'   => 'required|exists:mentors,id',
-        'student_id'  =>  'required|exists:student_id',
+        'student_id'  => 'required|exists:students,id',
         'start_time'  => 'required|date',
         'end_time'    => 'required|date|after:start_time',
         'call_link'   => 'required|string',
