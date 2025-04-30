@@ -20,7 +20,6 @@ export default function SessionCreate() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Load token and check mentorId, then set form data
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -36,7 +35,7 @@ export default function SessionCreate() {
         mentor_id: mentorId,
         student_id: studentId,
       }));
-      setLoading(false);  // Data is ready, allow form submission
+      setLoading(false);
     } catch (e) {
       console.error("Invalid token");
       navigate('/login');
@@ -67,11 +66,11 @@ export default function SessionCreate() {
     });
 
     try {
-      setLoading(true);  // Show loading when submitting
+      setLoading(true);
       await axiosClient.post('/sessions', data);
       navigate('/mentor');
     } catch (err) {
-      setLoading(false);  // Hide loading if error occurs
+      setLoading(false); 
       if (err.response?.data?.errors) {
         setErrors(err.response.data.errors);
         console.error('Validation errors:', err.response.data.errors);
@@ -91,7 +90,6 @@ export default function SessionCreate() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
-          {/* Title */}
           <div>
             <label className="block mb-1 font-medium">Title</label>
             <input
@@ -105,7 +103,6 @@ export default function SessionCreate() {
             {errors.title && <p className="text-red-500">{errors.title[0]}</p>}
           </div>
 
-          {/* Description */}
           <div>
             <label className="block mb-1 font-medium">Description</label>
             <textarea
@@ -117,7 +114,6 @@ export default function SessionCreate() {
             {errors.description && <p className="text-red-500">{errors.description[0]}</p>}
           </div>
 
-          {/* Start Time */}
           <div>
             <label className="block mb-1 font-medium">Start Time</label>
             <input
@@ -131,7 +127,6 @@ export default function SessionCreate() {
             {errors.start_time && <p className="text-red-500">{errors.start_time[0]}</p>}
           </div>
 
-          {/* End Time */}
           <div>
             <label className="block mb-1 font-medium">End Time</label>
             <input
@@ -145,7 +140,6 @@ export default function SessionCreate() {
             {errors.end_time && <p className="text-red-500">{errors.end_time[0]}</p>}
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
