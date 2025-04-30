@@ -21,6 +21,7 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'mentor_id'   => 'required|exists:mentors,id',
+        'student_id'  =>  'required|exists:student_id',
         'start_time'  => 'required|date',
         'end_time'    => 'required|date|after:start_time',
         'call_link'   => 'required|string',
@@ -37,7 +38,7 @@ public function store(Request $request)
     $session = Session::create($validated);
 
     return response()->json([
-        'message' => 'Session created successfully',
+        'message' => 'session booked successfully',
         'session' => $session,
     ], 201);
 }
@@ -133,22 +134,6 @@ public function update(Request $request, Session $session)
             'message' => 'Session marked as completed successfully',
             'session' => $session->load(['mentor.user', 'student.user'])
         ]);
-    }
-
- 
-    public function Booksession(Request $request)
-    {
-        $validatedData = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'session_id' => 'required|exists:sessions,id',
-        ]);
-    
-        $session = Session::find($validatedData['session_id']);
-    
-        $session->student_id = $validatedData['student_id'];
-        $session->save();
-    
-        return response()->json(['message' => 'Session booked successfully']);
     }
     
 

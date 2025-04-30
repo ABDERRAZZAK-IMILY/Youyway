@@ -106,7 +106,6 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('student', StudentController::class);
 
 
-    Route::post('/book' , [SessionController::class , 'Booksession'] );
     
 
 
