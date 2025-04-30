@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function SessionCreate() {
   const [form, setForm] = useState({
     mentor_id: null,
+    student_id : null,
     title: '',
     description: '',
     start_time: '',

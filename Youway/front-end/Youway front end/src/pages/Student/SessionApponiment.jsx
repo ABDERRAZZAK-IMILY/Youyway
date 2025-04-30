@@ -1,7 +1,7 @@
 import { axiosClient } from "../../api/axios";
 import { useState, useEffect } from "react";
 
-export default function SessionApponiment() {
+export default function Mentor() {
   const [data, setData] = useState([]);
   const [studentId, setStudentId] = useState(null);
 
@@ -28,9 +28,9 @@ export default function SessionApponiment() {
     e.preventDefault();
 
     try {
-      const response = await axiosClient.post('/book', {
-        student_id: studentId,
-        session_id: sessionId,
+      const response = await axiosClient.post('/sessions', {
+      
+
       });
 
       console.log(response.data.message);
@@ -43,7 +43,7 @@ export default function SessionApponiment() {
     <div className="sessions-container">
       {data.map((s) => (
         <div key={s.id} className="session-card">
-          <img src={`http://localhost:80/storage/${s.image_path}`} alt={s.title} className="session-image" />
+          <img src={`http://localhost:80/storage/${s.mentor.user.image_path}`} alt={s.title} className="session-image" />
           <h3>{s.title}</h3>
           <p>{s.description}</p>
 
