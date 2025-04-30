@@ -80,7 +80,7 @@ export default function Header() {
           onClick={() => setMenuOpen((prev) => !prev)}
           className="relative focus:outline-none"
         >
-       <IoIosNotifications size={40} />
+       <IoIosNotifications size={40}   className="hover:bg-gray-50" />
         </button>
 
         {menuOpen && (
