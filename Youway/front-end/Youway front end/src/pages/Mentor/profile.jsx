@@ -15,46 +15,29 @@ const Profile = () => {
 
   useEffect(() => {
     axios.get('http://localhost:80/api/my-student', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
-      .then(response => {
-        setStudent(response.data);
-
-        return axios.get('http://localhost:80/api/studentSession', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-      })
-      .then(response => {
-        const now = new Date();
-
-        const upcoming = response.data.filter(session => new Date(session.date) >= now);
-        const past = response.data.filter(session => new Date(session.date) < now);
-
-        setUpcomingSessions(upcoming);
-        setPastSessions(past);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Erreur:', error);
-        setLoading(false);
+    .then(({ data }) => {
+      setStudent(data);
+      return axios.get('http://localhost:80/api/studentSession', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
+    })
+    .then(({ data }) => {
+      const now = new Date();
+      setUpcomingSessions(data.filter(s => new Date(s.date) >= now));
+      setPastSessions(data.filter(s => new Date(s.date) < now));
+    })
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
   }, []);
 
-  const toggleSession = (id) => {
-    setOpenSessions((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  const toggleSession = id =>
+    setOpenSessions(prev => ({ ...prev, [id]: !prev[id] }));
 
-  if (loading) {
-    return <div className="text-center py-10">Chargement...</div>;
-  }
-
-  if (!student || !student.user) {
+  if (loading) return <div className="text-center py-10">Chargement...</div>;
+  if (!student || !student.user)
     return <div className="text-center py-10">Aucun profil trouvé.</div>;
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -64,9 +47,19 @@ const Profile = () => {
           {/* Profile Sidebar */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-center">
-              <img src={student.image_url || 'https://via.placeholder.com/150'} alt={student.user.name} className="rounded-full h-24 w-24 mx-auto mb-4 object-cover" />
+              <img
+                src={
+                  student.image_path
+                    ? `http://localhost/storage/${student.image_path}`
+                    : 'https://via.placeholder.com/150'
+                }
+                alt={student.user.name}
+                className="rounded-full h-24 w-24 mx-auto mb-4 object-cover"
+              />
               <h2 className="text-xl font-semibold">{student.user.name}</h2>
-              <p className="text-gray-500 text-sm">{student.user.email}</p>
+              <p className="text-gray-500 text-sm">
+                {student.user.email}
+              </p>
             </div>
             <div className="mt-6 space-y-2 text-sm">
               <p><strong>Rôle :</strong> Étudiant</p>
@@ -76,8 +69,7 @@ const Profile = () => {
               <p><strong>Membre depuis :</strong> {new Date(student.created_at).toLocaleDateString()}</p>
             </div>
             <Link to="/edit-profile" className="block mt-4 text-center bg-gray-200 py-2 rounded hover:bg-gray-300">
-              <FaCog className="inline mr-2" />
-              Modifier le profil
+              <FaCog className="inline mr-2" /> Modifier le profil
             </Link>
           </div>
 
@@ -146,9 +138,7 @@ const Profile = () => {
                             <h4 className="font-semibold">{session.topic}</h4>
                             <p className="text-sm text-gray-500">Avec {session.mentor.user.name} • {session.date}</p>
                           </div>
-                          <FaChevronDown
-                            className={`transition-transform ${openSessions[session.id] ? 'rotate-180' : ''}`}
-                          />
+                          <FaChevronDown className={`transition-transform ${openSessions[session.id] ? 'rotate-180' : ''}`} />
                         </button>
                         {openSessions[session.id] && (
                           <div className="p-4 border-t text-sm space-y-2">
@@ -168,12 +158,9 @@ const Profile = () => {
                 </div>
               )}
 
-              {activeTab === 'messages' && (
-                <Inbox />
-              )}
+              {activeTab === 'messages' && <Inbox />}
             </div>
           </div>
-
         </div>
       </div>
     </div>

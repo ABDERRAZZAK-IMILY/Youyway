@@ -105,7 +105,6 @@ Route::middleware('auth:api')->group(function () {
     */
 
 
-    Route::apiResource('student', StudentController::class);
 
 
     

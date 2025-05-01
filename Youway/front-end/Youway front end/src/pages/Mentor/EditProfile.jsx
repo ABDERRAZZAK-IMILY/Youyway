@@ -30,7 +30,7 @@ const EditProfile = () => {
         setImagePreview(`http://localhost/storage/${data.image_path}`);
       }
     })
-    .catch(err => console.error(err))
+    .catch(console.error)
     .finally(() => setLoading(false));
   }, []);
 
@@ -48,13 +48,15 @@ const EditProfile = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append('_method', 'PUT');
+    formData.append('user_id', student.user_id);
     formData.append('interests', form.interests);
     formData.append('university', form.university);
     formData.append('level', form.level);
     if (form.image) formData.append('image', form.image);
 
-    axios.put(
-      `http://localhost:80/api/student/${student.id}`,
+    axios.post(
+      `http://localhost:80/api/students/${student.id}`,
       formData,
       {
         headers: {
@@ -66,9 +68,10 @@ const EditProfile = () => {
     .then(() => {
       alert('Profile updated successfully');
       navigate('/profile');
+      window.location.reload();
     })
     .catch(err => {
-      console.error('Error updating profile:', err);
+      console.error('Error updating profile:', err.response?.data || err);
       alert('Error updating profile');
     });
   };
@@ -83,7 +86,7 @@ const EditProfile = () => {
         {['interests','university','level'].map(field => (
           <div key={field} className="mb-4">
             <label htmlFor={field} className="block text-sm font-medium text-gray-700">
-              {field.charAt(0).toUpperCase()+field.slice(1)}
+              {field.charAt(0).toUpperCase() + field.slice(1)}
             </label>
             <input
               id={field}
