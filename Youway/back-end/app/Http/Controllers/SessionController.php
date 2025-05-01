@@ -6,6 +6,7 @@ use App\Models\Session;
 use Illuminate\Http\Request;
 use App\Notifications\SessionAcceptedNotification;
 use App\Notifications\SessionScheduledNotification;
+use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
@@ -122,8 +123,21 @@ public function update(Request $request, Session $session)
             'session' => $session->load(['mentor.user', 'student.user'])
         ]);
     }
-    
 
+    public function Studentsession()
+    {
+        $student = Auth::user()->student;
+    
+        if ($student) {
+            $sessions = Session::with(['student.user', 'mentor.user'])
+                        ->where('student_id', $student->id)
+                        ->get();
+    
+            return response()->json($sessions);
+        }
+    
+        return response()->json(['message' => 'student not found'], 404);
+    }
 
 
 

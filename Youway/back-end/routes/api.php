@@ -57,6 +57,8 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/sessions/{session}/reject', [SessionController::class, 'rejectSession']);
     Route::put('/sessions/{session}/complete', [SessionController::class, 'completeSession']);
     Route::put('sessions/{session}/schedule', [SessionController::class, 'scheduleSession']);
+
+    Route::get('/studentSession' , [SessionController::class , 'Studentsession']);
     
     /*
     | Message Routes

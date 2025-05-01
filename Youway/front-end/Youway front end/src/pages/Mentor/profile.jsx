@@ -10,6 +10,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [openSessions, setOpenSessions] = useState({});
+  const [upcomingSessions, setUpcomingSessions] = useState([]);
+  const [pastSessions, setPastSessions] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:80/api/my-student', {
@@ -19,6 +21,21 @@ const Profile = () => {
     })
       .then(response => {
         setStudent(response.data);
+
+        return axios.get('http://localhost:80/api/studentSession', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+      })
+      .then(response => {
+        const now = new Date();
+
+        const upcoming = response.data.filter(session => new Date(session.date) >= now);
+        const past = response.data.filter(session => new Date(session.date) < now);
+
+        setUpcomingSessions(upcoming);
+        setPastSessions(past);
         setLoading(false);
       })
       .catch(error => {
@@ -38,9 +55,6 @@ const Profile = () => {
   if (!student || !student.user) {
     return <div className="text-center py-10">Aucun profil trouvé.</div>;
   }
-
-  const upcomingSessions = []; // ممكن تجيبها من API مستقبلًا
-  const pastSessions = [];
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -101,7 +115,7 @@ const Profile = () => {
                     upcomingSessions.map((session) => (
                       <div key={session.id} className="border rounded p-4 mb-3">
                         <h4 className="font-semibold">{session.topic}</h4>
-                        <p className="text-sm text-gray-600">Avec {session.mentor}</p>
+                        <p className="text-sm text-gray-600">Avec {session.mentor.user.name}</p>
                         <p className="text-sm text-gray-500 mt-1">
                           <FaCalendarAlt className="inline mr-1" />
                           {session.date} • {session.time}
@@ -130,7 +144,7 @@ const Profile = () => {
                         >
                           <div>
                             <h4 className="font-semibold">{session.topic}</h4>
-                            <p className="text-sm text-gray-500">Avec {session.mentor} • {session.date}</p>
+                            <p className="text-sm text-gray-500">Avec {session.mentor.user.name} • {session.date}</p>
                           </div>
                           <FaChevronDown
                             className={`transition-transform ${openSessions[session.id] ? 'rotate-180' : ''}`}
@@ -142,7 +156,7 @@ const Profile = () => {
                             <p><strong>Heure :</strong> {session.time}</p>
                             <p><strong>Sujet :</strong> {session.topic}</p>
                             <p><strong>Feedback :</strong></p>
-                            <p className="italic">{session.feedback}</p>
+                            <p className="italic">{session.feedback || 'Aucun feedback'}</p>
                             <div className="flex justify-end">
                               <button className="px-3 py-1 border rounded text-sm">Contacter le mentor</button>
                             </div>
