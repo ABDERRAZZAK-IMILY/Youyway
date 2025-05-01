@@ -18,6 +18,8 @@ import Mentor from "../pages/Mentors";
 
 import MentorDashboard from "../pages/Mentor/MentoreDashboard";
 
+import Profile from "../pages/Mentor/profile";
+
 export const router = createBrowserRouter([
     {
    
@@ -69,6 +71,8 @@ export const router = createBrowserRouter([
                 element :<MentorDashboard/>
             }
 
+            
+
         ]
     },
 
@@ -90,6 +94,12 @@ export const router = createBrowserRouter([
         path : '/mentores' ,
 
         element : <Mentor/>
+    }
+
+    , {
+        path : "/profile" ,
+
+        element : <Profile/>
     }
 
 

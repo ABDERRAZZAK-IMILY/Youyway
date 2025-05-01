@@ -121,11 +121,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/my-student', function () {
         $user = Auth::user();
-        $mentor = $user->student;
-        if (!$mentor) {
+        $student = $user->student;
+        if (!$student) {
             return response()->json(['message' => 'Mentor not found'], 404);
         }
-        return response()->json($mentor);
+        return response()->json($student);
     })->middleware('auth:api');
 
 
