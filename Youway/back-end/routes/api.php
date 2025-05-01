@@ -123,10 +123,12 @@ Route::middleware('auth:api')->group(function () {
         $user = Auth::user();
         $student = $user->student;
         if (!$student) {
-            return response()->json(['message' => 'Mentor not found'], 404);
+            return response()->json(['message' => 'Student not found'], 404);
         }
+        $student->load('user');
         return response()->json($student);
-    })->middleware('auth:api');
+    });
+    
 
 
 });
