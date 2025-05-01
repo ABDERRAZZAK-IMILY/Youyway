@@ -8,23 +8,22 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
 
-    public function index()
-    {
-        $students = Student::with('user')->get();
-        return response()->json($students);
-    }
-
-
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'interests' => 'nullable|string',
+            'bio' => 'nullable|string',
+            'competences' => 'nullable|string',
+            'disponibilites' => 'nullable|string',
+            'domaine' => 'nullable|string',
             'university' => 'nullable|string',
-            'level' => 'nullable|string',
-            'image_url' => 'nullable'
-
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('session_images', 'public');
+            $validatedData['image_path'] = $path; 
+        }
 
         $student = Student::create($validatedData);
 
@@ -43,12 +42,21 @@ class StudentController extends Controller
     {
         $validatedData = $request->validate([
             'user_id' => 'exists:users,id',
-            'interests' => 'nullable|string',
+            'bio' => 'nullable|string',
+            'competences' => 'nullable|string',
+            'disponibilites' => 'nullable|string',
+            'domaine' => 'nullable|string',
             'university' => 'nullable|string',
-            'level' => 'nullable|string',
-            'image_url' => 'nullable'
-
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($student->image_path) {
+                Storage::disk('public')->delete($student->image_path);
+            }
+
+            $validatedData['image_path'] = $request->file('image')->store('session_images', 'public');
+        }
 
         $student->update($validatedData);
 
@@ -60,6 +68,10 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
+        if ($student->image_path) {
+            Storage::disk('public')->delete($student->image_path);
+        }
+
         $student->delete();
 
         return response()->json(['message' => 'Student successfully deleted'], 200);

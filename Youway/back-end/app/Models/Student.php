@@ -15,7 +15,7 @@ class Student extends Model
         'interests',
         'university',
         'level',
-        'image_url'
+       'image_path', 
     ];
 
     public function user()
