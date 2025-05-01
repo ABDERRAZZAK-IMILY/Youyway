@@ -1,171 +1,129 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaSave, FaArrowLeft } from 'react-icons/fa';
 
 const EditProfile = () => {
   const [student, setStudent] = useState(null);
-  const [image, setImage] = useState(null);
+  const [form, setForm] = useState({
+    interests: '',
+    university: '',
+    level: '',
+    image: null,
+  });
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:80/api/my-student', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+    .then(({ data }) => {
+      setStudent(data);
+      setForm({
+        interests: data.interests || '',
+        university: data.university || '',
+        level: data.level || '',
+        image: null,
+      });
+      if (data.image_path) {
+        setImagePreview(`http://localhost/storage/${data.image_path}`);
       }
     })
-      .then(response => {
-        setStudent(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching profile:', error);
-        setLoading(false);
-      });
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
   }, []);
 
-  const handleFileChange = (e) => {
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+  };
+
+  const handleImageChange = e => {
     const file = e.target.files[0];
-    setImage(file);
+    setForm(f => ({ ...f, image: file }));
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-
     const formData = new FormData();
-    formData.append('user_id', student.user.id);
-    formData.append('bio', student.bio || '');
-    formData.append('competences', student.competences || '');
-    formData.append('disponibilites', student.disponibilites || '');
-    formData.append('domaine', student.domaine || '');
-    formData.append('university', student.university || '');
-    
-    if (image) {
-      formData.append('image', image);
-    }
+    formData.append('interests', form.interests);
+    formData.append('university', form.university);
+    formData.append('level', form.level);
+    if (form.image) formData.append('image', form.image);
 
-    axios.put(`http://localhost:80/api/students/${student.id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-      .then(response => {
-        navigate(`/profile`);
-      })
-      .catch(error => {
-        if (error.response && error.response.data.errors) {
-          setErrors(error.response.data.errors);
+    axios.put(
+      `http://localhost:80/api/student/${student.id}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
         }
-        console.error('Error updating profile:', error);
-      });
+      }
+    )
+    .then(() => {
+      alert('Profile updated successfully');
+      navigate('/profile');
+    })
+    .catch(err => {
+      console.error('Error updating profile:', err);
+      alert('Error updating profile');
+    });
   };
 
-  if (loading) {
-    return <div className="text-center py-10">Chargement...</div>;
-  }
-
-  if (!student) {
-    return <div className="text-center py-10">Aucun profil trouvé.</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (!student) return <div>No profile found.</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <button onClick={() => navigate('/profile')} className="text-gray-500 hover:text-gray-700">
-            <FaArrowLeft className="inline mr-2" /> Retour
-          </button>
-          <h2 className="text-2xl font-semibold">Modifier le Profil</h2>
-        </div>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Name and Email */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-600">Nom</label>
-              <input
-                id="name"
-                type="text"
-                value={student.user.name}
-                disabled
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
-              <input
-                id="email"
-                type="email"
-                value={student.user.email}
-                disabled
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              />
-            </div>
-
-            {/* Bio */}
-            <div className="col-span-2">
-              <label htmlFor="bio" className="block text-sm font-medium text-gray-600">Bio</label>
-              <textarea
-                id="bio"
-                value={student.bio || ''}
-                onChange={(e) => setStudent({ ...student, bio: e.target.value })}
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              ></textarea>
-              {errors.bio && <p className="text-red-500 text-sm">{errors.bio[0]}</p>}
-            </div>
-
-            {/* Competences */}
-            <div className="col-span-2">
-              <label htmlFor="competences" className="block text-sm font-medium text-gray-600">Compétences</label>
-              <textarea
-                id="competences"
-                value={student.competences || ''}
-                onChange={(e) => setStudent({ ...student, competences: e.target.value })}
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              ></textarea>
-              {errors.competences && <p className="text-red-500 text-sm">{errors.competences[0]}</p>}
-            </div>
-
-            {/* University */}
-            <div>
-              <label htmlFor="university" className="block text-sm font-medium text-gray-600">Université</label>
-              <input
-                id="university"
-                type="text"
-                value={student.university || ''}
-                onChange={(e) => setStudent({ ...student, university: e.target.value })}
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              />
-            </div>
-
-            {/* Profile Image */}
-            <div className="col-span-2">
-              <label htmlFor="image" className="block text-sm font-medium text-gray-600">Image de Profil</label>
-              <input
-                id="image"
-                type="file"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="w-full mt-1 p-2 border border-gray-300 rounded"
-              />
-              {errors.image && <p className="text-red-500 text-sm">{errors.image[0]}</p>}
-            </div>
-
-            {/* Submit Button */}
-            <div className="col-span-2 text-right">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600"
-              >
-                <FaSave className="inline mr-2" /> Sauvegarder les modifications
-              </button>
-            </div>
+    <div className="max-w-7xl mx-auto p-6">
+      <h2 className="text-2xl font-semibold mb-6">Edit Profile</h2>
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg">
+        {['interests','university','level'].map(field => (
+          <div key={field} className="mb-4">
+            <label htmlFor={field} className="block text-sm font-medium text-gray-700">
+              {field.charAt(0).toUpperCase()+field.slice(1)}
+            </label>
+            <input
+              id={field}
+              name={field}
+              type="text"
+              value={form[field]}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border rounded-md"
+            />
           </div>
-        </form>
-      </div>
+        ))}
+
+        <div className="mb-4">
+          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+            Profile Image
+          </label>
+          <input
+            id="image"
+            name="image"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="mt-1"
+          />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Profile Preview"
+              className="mt-2 h-32 w-32 object-cover rounded-full"
+            />
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Save Changes
+        </button>
+      </form>
     </div>
   );
 };

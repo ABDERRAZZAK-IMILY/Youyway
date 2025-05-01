@@ -19,6 +19,7 @@ import Mentor from "../pages/Mentors";
 import MentorDashboard from "../pages/Mentor/MentoreDashboard";
 
 import Profile from "../pages/Mentor/profile";
+import EditProfile from "../pages/Mentor/EditProfile";
 
 export const router = createBrowserRouter([
     {
@@ -100,6 +101,11 @@ export const router = createBrowserRouter([
         path : "/profile" ,
 
         element : <Profile/>
+    }
+    , {
+
+        path : "/edit-profile",
+        element : <EditProfile/>
     }
 
 
