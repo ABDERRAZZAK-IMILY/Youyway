@@ -18,6 +18,7 @@ class CreateStudentsTable extends Migration
             $table->string('interests')->nullable();
             $table->string('university')->nullable();
             $table->string('level')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }

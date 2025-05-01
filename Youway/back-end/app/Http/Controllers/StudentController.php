@@ -22,6 +22,8 @@ class StudentController extends Controller
             'interests' => 'nullable|string',
             'university' => 'nullable|string',
             'level' => 'nullable|string',
+            'image_url' => 'nullable'
+
         ]);
 
         $student = Student::create($validatedData);
@@ -44,6 +46,8 @@ class StudentController extends Controller
             'interests' => 'nullable|string',
             'university' => 'nullable|string',
             'level' => 'nullable|string',
+            'image_url' => 'nullable'
+
         ]);
 
         $student->update($validatedData);
