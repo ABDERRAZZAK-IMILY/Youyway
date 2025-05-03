@@ -14,7 +14,7 @@ export default function Layout({ children }) {
                 <Link to="/" className="text-gray-600 hover:text-gray-800">Home</Link>
               </li>
               <li>
-                <Link to="/Sessions" className="text-gray-600 hover:text-gray-800">Academic guidance sessions</Link>
+                <Link to="/mentors" className="text-gray-600 hover:text-gray-800">Mentors</Link>
               </li>
             </ul>
             <div className="ml-8 flex items-center space-x-4">

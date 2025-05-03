@@ -8,36 +8,59 @@ import Inbox from '../Inbox';
 const Profile = () => {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [openSessions, setOpenSessions] = useState({});
   const [upcomingSessions, setUpcomingSessions] = useState([]);
   const [pastSessions, setPastSessions] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:80/api/my-student', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    })
-    .then(({ data }) => {
-      setStudent(data);
-      return axios.get('http://localhost:80/api/studentSession', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-    })
-    .then(({ data }) => {
-      const now = new Date();
-      setUpcomingSessions(data.filter(s => new Date(s.date) >= now));
-      setPastSessions(data.filter(s => new Date(s.date) < now));
-    })
-    .catch(err => console.error(err))
-    .finally(() => setLoading(false));
+    const fetchData = async () => {
+      try {
+        const { data: studentData } = await axios.get('http://localhost:80/api/my-student', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        setStudent(studentData);
+
+        const { data: sessionsData } = await axios.get('http://localhost:80/api/studentSession', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+
+        const now = new Date();
+        setUpcomingSessions(sessionsData.filter(s => new Date(s.start_time) >= now));
+        setPastSessions(sessionsData.filter(s => new Date(s.start_time) < now));
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError(err.response?.data?.message || 'An error occurred while fetching data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const toggleSession = id =>
+  const toggleSession = (id) => {
     setOpenSessions(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
-  if (loading) return <div className="text-center py-10">Chargement...</div>;
-  if (!student || !student.user)
-    return <div className="text-center py-10">Aucun profil trouvé.</div>;
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-xl text-gray-600">Loading...</div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-xl text-red-600">{error}</div>
+    </div>
+  );
+
+  if (!student) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-xl text-gray-600">No profile found</div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">

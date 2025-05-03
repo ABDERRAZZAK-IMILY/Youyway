@@ -14,12 +14,12 @@ import SessionCreate from "../pages/Mentor/CreateSessions";
 
 import SessionApponiment from "../pages/Student/SessionApponiment";
 
-import Mentor from "../pages/Mentors";
+import Mentor from "../pages/Student/Mentors";
 
 import MentorDashboard from "../pages/Mentor/MentoreDashboard";
 
-import Profile from "../pages/Mentor/profile";
-import EditProfile from "../pages/Mentor/EditProfile";
+import Profile from "../pages/Student/profile";
+import EditProfile from "../pages/Student/EditProfile";
 
 export const router = createBrowserRouter([
     {
