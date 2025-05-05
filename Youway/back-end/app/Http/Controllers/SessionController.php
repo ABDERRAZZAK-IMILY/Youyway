@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Session;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Notifications\SessionAcceptedNotification;
 use App\Notifications\SessionScheduledNotification;
@@ -39,15 +40,32 @@ public function store(Request $request)
     ], 201);
 }
 
-public function update(Request $request, Session $session)
-{
-    $validated = $request->validate([
-        'start_time'     => 'date',
-        'end_time'       => 'date|after:start_time',
-        'request_status' => 'in:pending,accepted,rejected',
-        'title'          => 'string|max:255',
-        'description'    => 'nullable|string',
-    ]);
+    public function studentSession()
+    {
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Student profile not found'], 404);
+        }
+
+        $sessions = Session::where('student_id', $student->id)
+            ->with(['mentor.user'])
+            ->orderBy('start_time', 'desc')
+            ->get();
+
+        return response()->json($sessions);
+    }
+
+    public function update(Request $request, Session $session)
+    {
+        $validated = $request->validate([
+            'start_time'     => 'date',
+            'end_time'       => 'date|after:start_time',
+            'request_status' => 'in:pending,accepted,rejected',
+            'title'          => 'string|max:255',
+            'description'    => 'nullable|string',
+        ]);
 
     $session->update($validated);
 
@@ -123,22 +141,5 @@ public function update(Request $request, Session $session)
             'session' => $session->load(['mentor.user', 'student.user'])
         ]);
     }
-
-    public function Studentsession()
-    {
-        $student = Auth::user()->student;
-    
-        if ($student) {
-            $sessions = Session::with(['student.user', 'mentor.user'])
-                        ->where('student_id', $student->id)
-                        ->get();
-    
-            return response()->json($sessions);
-        }
-    
-        return response()->json(['message' => 'student not found'], 404);
-    }
-
-
 
 }

@@ -48,6 +48,8 @@ Route::middleware('auth:api')->group(function () {
     */
     Route::apiResource('students', StudentController::class);
     Route::get('/students/{student}/sessions', [StudentController::class, 'getSessions']);
+    Route::get('/my-student', [StudentController::class, 'myStudent']);
+    Route::get('/studentSession', [SessionController::class, 'studentSession']);
 
     /*
     | Session Routes
@@ -118,18 +120,6 @@ Route::middleware('auth:api')->group(function () {
         }
         return response()->json($mentor);
     })->middleware('auth:api');
-    
-
-    Route::get('/my-student', function () {
-        $user = Auth::user();
-        $student = $user->student;
-        if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
-        $student->load('user');
-        return response()->json($student);
-    });
-    
 
 
 });

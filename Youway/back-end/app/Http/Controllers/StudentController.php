@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -33,9 +34,13 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
+        $student->load('user');
+        
         return response()->json($student);
     }
+    
 
+  
     public function update(Request $request, Student $student)
     {
         $validatedData = $request->validate([
@@ -71,5 +76,17 @@ class StudentController extends Controller
         $student->delete();
 
         return response()->json(['message' => 'Student successfully deleted'], 200);
+    }
+
+    public function myStudent()
+    {
+        $user = Auth::user();
+        $student = Student::where('user_id', $user->id)->with('user')->first();
+
+        if (!$student) {
+            return response()->json(['message' => 'Student profile not found'], 404);
+        }
+
+        return response()->json($student);
     }
 }
