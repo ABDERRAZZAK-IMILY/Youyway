@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mentor;
+use App\Models\MentorReview;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MentorController extends Controller
@@ -45,9 +48,61 @@ class MentorController extends Controller
     
 
 
-    public function show(Mentor $mentor)
+    public function show($id)
     {
+        $mentor = Mentor::with('user')->findOrFail($id);
         return response()->json($mentor);
+    }
+    
+  
+    public function getReviews($id)
+    {
+        try {
+            $mentor = Mentor::findOrFail($id);
+            $reviews = MentorReview::where('mentor_id', $id)
+                ->join('users', 'mentor_reviews.student_id', '=', 'users.id')
+                ->select('mentor_reviews.*', 'users.name as student_name')
+                ->orderBy('created_at', 'desc')
+                ->get();
+                
+            return response()->json($reviews);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to get reviews', 'details' => $e->getMessage()], 500);
+        }
+    }
+    
+  
+    public function storeReview(Request $request, $id)
+    {
+        try {
+            $mentor = Mentor::findOrFail($id);
+            
+            $validatedData = $request->validate([
+                'rating' => 'required|integer|min:1|max:5',
+                'comment' => 'required|string|max:500'
+            ]);
+            
+            $userId = Auth::id();
+            
+            $review = new MentorReview([
+                'mentor_id' => $id,
+                'student_id' => $userId,
+                'rating' => $validatedData['rating'],
+                'comment' => $validatedData['comment']
+            ]);
+            
+            $review->save();
+            
+            $avgRating = MentorReview::where('mentor_id', $id)->avg('rating');
+            $mentor->update(['rating' => $avgRating]);
+            
+            $student = User::find($userId);
+            $review->student_name = $student ? $student->name : 'Student';
+            
+            return response()->json($review, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to store review', 'details' => $e->getMessage()], 500);
+        }
     }
 
   
