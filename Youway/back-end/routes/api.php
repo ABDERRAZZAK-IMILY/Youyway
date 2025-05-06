@@ -7,6 +7,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MentorAvailabilityController;
+use Illuminate\Support\Facades\Broadcast;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,9 @@ Route::middleware('auth:api')->group(function () {
     */
     Route::apiResource('mentors', MentorController::class);
     Route::get('/mentors/search', [MentorController::class, 'search']);
+    Route::get('/mentors/{mentor}/statistics', [MentorController::class, 'getStatistics']);
+    Route::get('/mentors/{id}/reviews', [MentorController::class, 'getReviews']);
+    Route::post('/mentors/{id}/reviews', [MentorController::class, 'storeReview']);
     Route::get('/mentors/{mentor}/statistics', [MentorController::class, 'getStatistics']);
 
     /*
@@ -114,7 +118,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/mentor-availability/{id}', [MentorAvailabilityController::class, 'destroy']);
 
 
-    
+    Route::post('/broadcasting/auth', function (Request $request) {
+        return Broadcast::auth($request);
+    });
 
 
     Route::get('/my-mentor', function () {
