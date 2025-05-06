@@ -28,7 +28,6 @@ class MentorAvailabilityController extends Controller
             return response()->json(['message' => 'Error fetching availabilities'], 500);
         }
     }
-
   
     public function store(Request $request)
     {

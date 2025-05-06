@@ -16,7 +16,12 @@ class Mentor extends Model
         'disponibilites',
         'domaine',
         'university',
-        'image_path', 
+        'image_path',
+        'rating',
+        'years_experience',
+        'hourly_rate',
+        'specialty',
+        'availability',
     ];
 
     public function user()
@@ -27,5 +32,15 @@ class Mentor extends Model
     public function sessions()
     {
         return $this->hasMany(Session::class);
+    }
+    
+    public function availabilities()
+    {
+        return $this->hasMany(MentorAvailability::class);
+    }
+    
+    public function reviews()
+    {
+        return $this->hasMany(MentorReview::class);
     }
 }
