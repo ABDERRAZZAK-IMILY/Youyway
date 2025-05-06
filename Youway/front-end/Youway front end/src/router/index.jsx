@@ -10,7 +10,7 @@ import DashboardLayout from "../components/Layout/DashboardLayout";
 
 import SessionMange from "../pages/Mentor/SessionsMange";
 
-import SessionCreate from "../pages/Mentor/CreateSessions";
+import SessionCreate from "../pages/Student/CreateSessions";
 
 import SessionApponiment from "../pages/Student/SessionApponiment";
 
