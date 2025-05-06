@@ -5,9 +5,33 @@ use App\Models\User;
 use App\Models\Session;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
+   
+    public function getUsers()
+    {
+        try {
+            $users = User::all();
+            return response()->json($users, 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching users: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to retrieve users', 'details' => $e->getMessage()], 500);
+        }
+    }
+    
+
+    public function getSessions()
+    {
+        try {
+            $sessions = Session::all();
+            return response()->json($sessions, 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching sessions: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to retrieve sessions', 'details' => $e->getMessage()], 500);
+        }
+    }
    
     public function getStatistics()
     {
@@ -56,5 +80,21 @@ class AdminController extends Controller
             'message' => 'Mentor successfully validated',
             'user' => $user
         ], 200);
+    }
+    
+   
+    public function cancelSession(Session $session)
+    {
+        try {
+            $session->update(['status' => 'cancelled']);
+            
+            return response()->json([
+                'message' => 'Session successfully cancelled',
+                'session' => $session
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error cancelling session: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to cancel session', 'details' => $e->getMessage()], 500);
+        }
     }
 }
