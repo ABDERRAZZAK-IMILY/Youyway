@@ -1,26 +1,14 @@
 <?php
 use App\Http\Controllers\MentorController;
+use App\Http\Controllers\MentorAvailabilityController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MentorAvailabilityController;
-use Illuminate\Support\Facades\Broadcast;
-
-
 use Illuminate\Support\Facades\Auth;
-
-Route::middleware('auth:api')->group(function () {
-    Route::get('/messages', [MessageController::class, 'index']);
-    
-    Route::get('/messages/{userId}', [MessageController::class, 'getMessages']);
-    
-    Route::post('/messages/{userId}', [MessageController::class, 'sendMessage']);
-    
-    Route::get('/inbox-data', [MessageController::class, 'getInboxData']);
-});
+use Illuminate\Support\Facades\Broadcast;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
@@ -42,12 +30,20 @@ Route::middleware('auth:api')->group(function () {
     /*
     | Mentor Routes
     */
-    Route::apiResource('mentors', MentorController::class);
-    Route::get('/mentors/search', [MentorController::class, 'search']);
-    Route::get('/mentors/{mentor}/statistics', [MentorController::class, 'getStatistics']);
+    Route::apiResource('/mentors', MentorController::class);
+    Route::get('/mentors', [MentorController::class, 'index']);
+    Route::get('/mentors/{id}', [MentorController::class, 'show']);
     Route::get('/mentors/{id}/reviews', [MentorController::class, 'getReviews']);
     Route::post('/mentors/{id}/reviews', [MentorController::class, 'storeReview']);
     Route::get('/mentors/{mentor}/statistics', [MentorController::class, 'getStatistics']);
+    
+    /*
+    | Mentor Availability Routes
+    */
+    Route::get('/mentor-availability/{mentorId}', [MentorAvailabilityController::class, 'index']);
+    Route::post('/mentor-availability', [MentorAvailabilityController::class, 'store']);
+    Route::put('/mentor-availability/{id}', [MentorAvailabilityController::class, 'update']);
+    Route::delete('/mentor-availability/{id}', [MentorAvailabilityController::class, 'destroy']);
 
     /*
     | Student Routes
@@ -90,16 +86,31 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/notifications/read', [NotificationController::class, 'markAsRead']);
 
     /*
+    | Broadcasting Routes
+    */
+    Route::post('/broadcasting/auth', function (Request $request) {
+        return Broadcast::auth($request);
+    });
+
+    /*
     | Admin Routes
     */
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
+        
         Route::get('/admin/users', [AdminController::class, 'getUsers']);
         Route::patch('/admin/users/{user}/suspend', [AdminController::class, 'suspendUser']);
         Route::patch('/admin/users/{user}/activate', [AdminController::class, 'activateUser']);
-        Route::get('/admin/reports', [AdminController::class, 'getReports']);
         Route::post('/admin/users/{user}/validate', [AdminController::class, 'validateMentor']);
+        
+        Route::get('/admin/sessions', [AdminController::class, 'getSessions']);
+        Route::patch('/admin/sessions/{session}/cancel', [AdminController::class, 'cancelSession']);
+        
+        Route::get('/admin/reports', [AdminController::class, 'getReports']);
     });
+    
+   
+    
     /*
     | Evaluation Routes
     */
@@ -112,15 +123,10 @@ Route::middleware('auth:api')->group(function () {
     | student Routes
     */
 
-    Route::get('/mentor-availability/{mentorId}', [MentorAvailabilityController::class, 'index']);
-    Route::post('/mentor-availability', [MentorAvailabilityController::class, 'store']);
-    Route::put('/mentor-availability/{id}', [MentorAvailabilityController::class, 'update']);
-    Route::delete('/mentor-availability/{id}', [MentorAvailabilityController::class, 'destroy']);
 
 
-    Route::post('/broadcasting/auth', function (Request $request) {
-        return Broadcast::auth($request);
-    });
+
+    
 
 
     Route::get('/my-mentor', function () {
@@ -134,5 +140,3 @@ Route::middleware('auth:api')->group(function () {
 
 
 });
-
-

@@ -7,17 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Session;
 
 class SessionScheduledNotification extends Notification
 {
     use Queueable;
 
+    protected $session;
+
     /**
      * Create a new notification instance.
      */
-    protected $session;
-
-    public function __construct($session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }
@@ -36,6 +37,9 @@ public function toDatabase($notifiable)
     return [
         'message'   => "Session scheduled on {$this->session->scheduled_at}.",
         'call_link' => $this->session->call_link,
+        'session_id' => $this->session->id,
+        'type' => 'session_scheduled',
+        'title' => $this->session->title ?? 'Tutoring Session'
     ];
 }
 public function toBroadcast($notifiable)

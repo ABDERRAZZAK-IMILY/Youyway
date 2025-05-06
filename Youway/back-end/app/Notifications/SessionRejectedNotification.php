@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Session;
 
-class SessionAcceptedNotification extends Notification
+class SessionRejectedNotification extends Notification
 {
     use Queueable;
 
@@ -30,33 +30,29 @@ class SessionAcceptedNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast','mail'];
+        return ['database', 'broadcast'];
     }
+
     public function toDatabase($notifiable)
     {
         return [
-            'message' => "Your session has been accepted.",
+            'message' => "Your session request has been rejected.",
             'session_id' => $this->session->id,
-            'type' => 'session_accepted',
-            'title' => $this->session->title,
-            'call_link' => $this->session->call_link
+            'type' => 'session_rejected',
+            'title' => $this->session->title
         ];
     }
+
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage($this->toDatabase($notifiable));
     }
+    
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Session Accepted: ' . $this->session->title)
-            ->line('Your tutoring session request has been accepted.')
-            ->line('Session Title: ' . $this->session->title)
-            ->line('Start Time: ' . $this->session->start_time)
-            ->line('End Time: ' . $this->session->end_time)
-            ->action('Join Session', $this->session->call_link ?? url('/sessions/' . $this->session->id))
-            ->line('Thank you for using our platform!');
-            
+            ->subject('Session Request Rejected')
+            ->line('Your tutoring session request titled "' . $this->session->title . '" has been rejected.')
+            ->line('You can book another session with a different mentor.');
     }
-    
 }

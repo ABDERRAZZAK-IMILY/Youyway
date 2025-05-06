@@ -8,52 +8,43 @@ use Illuminate\Http\Request;
 use App\Notifications\SessionAcceptedNotification;
 use App\Notifications\SessionScheduledNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SessionController extends Controller
 {
     public function index()
-{
-    $sessions = Session::with(['student.user', 'mentor.user'])->get();
-    return response()->json($sessions);
-}
+    {
+        $sessions = Session::with(['student.user', 'mentor.user'])->get();
+        return response()->json($sessions);
+    }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'mentor_id'   => 'required|exists:mentors,id',
+            'student_id'  => 'required|exists:students,id',
+            'start_time'  => 'required|date',
+            'end_time'    => 'required|date|after:start_time',
+            'call_link'   => 'required|string',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
 
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'mentor_id'   => 'required|exists:mentors,id',
-        'student_id'  => 'required|exists:students,id',
-        'start_time'  => 'required|date',
-        'end_time'    => 'required|date|after:start_time',
-        'call_link'   => 'required|string',
-        'title'       => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+        $session = Session::create($validated);
 
-   
-
-    $session = Session::create($validated);
-
-    return response()->json([
-        'message' => 'session booked successfully',
-        'session' => $session,
-    ], 201);
-}
+        return response()->json([
+            'message' => 'session booked successfully',
+            'session' => $session,
+        ], 201);
+    }
 
     public function studentSession()
     {
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
-
-        if (!$student) {
-            return response()->json(['message' => 'Student profile not found'], 404);
-        }
-
+        $student = Student::where('user_id', Auth::id())->firstOrFail();
         $sessions = Session::where('student_id', $student->id)
-            ->with(['mentor.user'])
+            ->with('mentor.user')
             ->orderBy('start_time', 'desc')
             ->get();
-
         return response()->json($sessions);
     }
 
@@ -65,34 +56,49 @@ public function store(Request $request)
             'request_status' => 'in:pending,accepted,rejected',
             'title'          => 'string|max:255',
             'description'    => 'nullable|string',
+            'call_link'      => 'nullable|url',
         ]);
 
-    $session->update($validated);
+        $session->update($validated);
 
-    return response()->json([
-        'message' => 'Session updated successfully',
-        'session' => $session,
-    ], 200);
-}
+        return response()->json([
+            'message' => 'Session updated successfully',
+            'session' => $session,
+        ], 200);
+    }
 
     public function show(Session $session)
     {
         return response()->json($session);
     }
 
-   
     public function destroy(Session $session)
     {
         $session->delete();
-
         return response()->json(['message' => 'Session successfully deleted'], 200);
     }
 
-    public function acceptSession(Session $session)
+    public function acceptSession(Request $request, Session $session)
     {
-        $session->update(['request_status' => 'accepted']);
+        $validated = $request->validate([
+            'call_link' => 'nullable|url',
+        ]);
 
-        $session->student->notify(new SessionAcceptedNotification($session));
+        $data = ['request_status' => 'accepted'];
+        if (!empty($validated['call_link'])) {
+            $data['call_link'] = $validated['call_link'];
+        }
+
+        $session->update($data);
+        $session->load('student.user');
+
+        if ($session->student && $session->student->user) {
+            try {
+                $session->student->user->notify(new SessionAcceptedNotification($session));
+            } catch (\Throwable $e) {
+                Log::error("Notification failed: " . $e->getMessage());
+            }
+        }
 
         return response()->json([
             'message' => 'Session successfully accepted',
@@ -102,28 +108,27 @@ public function store(Request $request)
 
     public function scheduleSession(Request $request, Session $session)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'scheduled_at' => 'required|date',
         ]);
 
         $session->update([
             'request_status' => 'scheduled',
-            'scheduled_at' => $validatedData['scheduled_at'],
-            'call_link' => url("/session/{$session->id}")
+            'scheduled_at'   => $validated['scheduled_at'],
+            'call_link'      => url("/session/{$session->id}")
         ]);
 
-        $session->student->notify(new SessionScheduledNotification($session));
+        $session->student->user->notify(new SessionScheduledNotification($session));
 
         return response()->json([
             'message' => 'Session successfully scheduled',
-            'session' => $session
+            'session' => $session,
         ], 200);
     }
 
     public function rejectSession(Session $session)
     {
         $session->update(['request_status' => 'rejected']);
-
         return response()->json([
             'message' => 'Session successfully rejected',
             'session' => $session,
@@ -132,14 +137,10 @@ public function store(Request $request)
 
     public function completeSession(Session $session)
     {
-        $session->update([
-            'status' => 'completed'
-        ]);
-
+        $session->update(['status' => 'completed']);
         return response()->json([
             'message' => 'Session marked as completed successfully',
-            'session' => $session->load(['mentor.user', 'student.user'])
-        ]);
+            'session' => $session->load(['mentor.user', 'student.user']),
+        ], 200);
     }
-
 }
