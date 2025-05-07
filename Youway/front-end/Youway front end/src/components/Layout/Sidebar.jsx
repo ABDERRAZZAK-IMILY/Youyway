@@ -4,6 +4,7 @@ import { AiFillHome } from 'react-icons/ai';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { MdOutlineMeetingRoom } from 'react-icons/md';
+import { FaUser } from 'react-icons/fa';
 
 const menuItems = [
   {
@@ -15,6 +16,11 @@ const menuItems = [
     name: 'Mange Sessions',
     icon: <MdOutlineMeetingRoom size={20} />,
     to: '/SessionMange',
+  },
+  {
+    name: 'Profile',
+    icon: <FaUser size={20} />,
+    to: '/mentor-profile',
   },
   {
     name: 'Users',
