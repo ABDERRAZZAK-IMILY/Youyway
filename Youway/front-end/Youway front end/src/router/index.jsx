@@ -16,47 +16,12 @@ import SessionApponiment from "../pages/Student/SessionApponiment";
 
 import Mentor from "../pages/Student/Mentors";
 
-import MentorDashboard from "../pages/Mentor/MentoreDashboard.jsx"
-import StudentDashboard from "../pages/Student/StudentDashboard.jsx";
-
-// Admin Components
-import AdminDashboard from "../pages/Admin/AdminDashboard";
-import UserManagement from "../pages/Admin/UserManagement";
-import SessionManagement from "../pages/Admin/SessionManagement";
-import Settings from "../pages/Admin/Settings";
-import AdminLayout from "../components/Layout/AdminLayout";
+import MentorDashboard from "../pages/Mentor/MentoreDashboard";
 
 import Profile from "../pages/Student/profile";
 import EditProfile from "../pages/Student/EditProfile";
-import MentorProfile from "../pages/Mentor/MentorProfile";
-import MentorEditProfile from "../pages/Mentor/MentorEditProfile";
-import ManageAvailability from "../pages/Mentor/ManageAvailability";
-import MentorDetail from "../pages/Student/MentorDetail";
 
 export const router = createBrowserRouter([
-    // Admin Routes
-    {
-        path: "/",
-        element: <AdminLayout />,
-        children: [
-            {
-                path: "/admin-dashboard",
-                element: <AdminDashboard />
-            },
-            {
-                path: "/admin-users",
-                element: <UserManagement />
-            },
-            {
-                path: "/admin-sessions",
-                element: <SessionManagement />
-            },
-            {
-                path: "/admin-settings",
-                element: <Settings />
-            }
-        ]
-    },
     {
    
         element : <Layout />,
@@ -101,68 +66,48 @@ export const router = createBrowserRouter([
             }
 
             , {
-                path : '/student-dashboard',
-                element : <StudentDashboard/>
-            }
-            , {
+
                 path : '/mentordashboard',
-                element : <MentorDashboard/>
+
+                element :<MentorDashboard/>
             }
-            , {
-                path : '/studentdashboard', 
-                element : <StudentDashboard/>
-            }
-            , {
-                path : "/mentor-detail/:mentorId",
-                element : <MentorDetail/>
-            },
-            {
-                path : "/inbox",
-                element : <Inbox/>
-            }
-        ,
-            {
-              path : "/sesssion" ,
-        
-              element : <SessionApponiment/>
-        
-            }
-        
-            ,
-        
-            {
-                path : '/mentores' ,
-        
-                element : <Mentor/>
-            }
-        
-            , {
-                path : "/profile" ,
-        
-                element : <Profile/>
-            }
-            , {
-        
-                path : "/edit-profile",
-                element : <EditProfile/>
-            }
-            , {
-                path : "/mentor-profile",
-                element : <MentorProfile/>
-            }
-            , {
-                path : "/mentor-edit-profile",
-                element : <MentorEditProfile/>
-            }
-            , {
-                path : "/mentor-availability",
-                element : <ManageAvailability/>
-            }
-        
+
             
 
         ]
     },
+
+    {
+        path : "/inbox",
+        element : <Inbox/>
+    }
+,
+    {
+      path : "/sesssion" ,
+
+      element : <SessionApponiment/>
+
+    }
+
+    ,
+
+    {
+        path : '/mentores' ,
+
+        element : <Mentor/>
+    }
+
+    , {
+        path : "/profile" ,
+
+        element : <Profile/>
+    }
+    , {
+
+        path : "/edit-profile",
+        element : <EditProfile/>
+    }
+
 
   
 ]);
