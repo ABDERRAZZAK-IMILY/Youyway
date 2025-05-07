@@ -33,6 +33,7 @@ const AdminSidebar = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white w-64 fixed">
+      {/* Logo */}
       <div className="p-5 border-b border-gray-800 flex justify-center">
         <Link to="/admin-dashboard" className="flex items-center justify-center">
           <img src={logo} alt="YouWay Logo" className="h-10" />
@@ -40,6 +41,7 @@ const AdminSidebar = () => {
         </Link>
       </div>
 
+      {/* Menu Items */}
       <div className="flex-grow overflow-y-auto py-4">
         <ul className="space-y-2 px-4">
           {menuItems.map((item) => (
@@ -58,6 +60,7 @@ const AdminSidebar = () => {
         </ul>
       </div>
 
+      {/* Admin Info & Logout */}
       <div className="p-4 border-t border-gray-800">
         <div className="flex items-center mb-4">
           <div className="bg-indigo-600 p-2 rounded-full">
