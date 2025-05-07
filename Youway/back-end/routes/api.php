@@ -140,3 +140,6 @@ Route::middleware('auth:api')->group(function () {
 
 
 });
+
+
+Route::get('/mentors', [MentorController::class, 'index']);

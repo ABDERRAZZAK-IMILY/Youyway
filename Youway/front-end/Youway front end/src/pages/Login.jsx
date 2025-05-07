@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../api/axios.js";
 import loginImage from "../assets/login.png";
-import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,85 +31,10 @@ export default function Login() {
     }
   };
 
-  const generateDevToken = (email, role) => {
-    // Create a simple header and payload
-    const header = { alg: 'HS256', typ: 'JWT' };
-    const payload = {
-      sub: '123456',
-      name: email.split('@')[0],
-      email: email,
-      role: role,
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + (60 * 60) // 1 hour expiration
-    };
-    
-    // Convert to base64
-    const headerBase64 = btoa(JSON.stringify(header));
-    const payloadBase64 = btoa(JSON.stringify(payload));
-    
-    // Add a fake signature (this is for DEVELOPMENT only)
-    const signature = btoa('devSignature123');
-    
-    // Return proper JWT format: header.payload.signature
-    return `${headerBase64}.${payloadBase64}.${signature}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
-    // DEVELOPMENT MODE: Use hardcoded credentials for testing
-    // This bypasses the backend connection
-    if (
-      (formData.email === 'admin@youway.com' && formData.password === 'admin123') ||
-      (formData.email === 'ahmed@gmail.com' && formData.password === 'imilyimily') ||
-      (formData.email === 'mentor@gmail.com' && formData.password === 'imilyimily')
-    ) {
-      // Determine role based on email
-      let role = 'student';
-      if (formData.email === 'admin@youway.com') role = 'admin';
-      if (formData.email === 'mentor@gmail.com') role = 'mentor';
-      
-      // Generate development token
-      const token = generateDevToken(formData.email, role);
-      
-      // Create user object
-      const user = {
-        id: role === 'admin' ? 1 : (role === 'mentor' ? 2 : 3),
-        email: formData.email,
-        name: formData.email.split('@')[0],
-        role: role,
-        status: 'active'
-      };
-      
-      // Save to localStorage
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
-      localStorage.setItem('userName', user.name);
-      localStorage.setItem('userRole', role);
-      
-      // Navigate based on role
-      console.log('Navigating based on role:', role);
-      switch (role) {
-        case 'student':
-          navigate('/studentdashboard');
-          break;
-        case 'mentor':
-          navigate('/mentordashboard'); 
-          break;
-        case 'admin':
-          navigate('/admin-dashboard');
-          break;
-        default:
-          navigate('/');
-      }
-      
-      // Add a log to help with debugging
-      console.log('Authentication successful:', { user, token: token.substring(0, 20) + '...' });
-      return;
-    }
-    
-    // PRODUCTION MODE: Use actual backend (only executes if dev credentials don't match)
+
     try {
       const response = await axiosClient.post("/login", formData);
       const { user, authorization } = response.data;
@@ -123,7 +47,7 @@ export default function Login() {
           navigate("/studentdashboard");
           break;
         case "mentor":
-          navigate("/mentordashboard"); 
+          navigate("/mentordashboard");
           break;
         case "admin":
           navigate("/admin-dashboard");

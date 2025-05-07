@@ -23,9 +23,9 @@ const menuItems = [
     to: '/mentor-profile',
   },
   {
-    name: 'Students',
+    name: 'Availability',
     icon: <BsFillPeopleFill size={20} />,
-    to: '/mentor-students',
+    to: '/mentor-availability',
   }
 ];
 

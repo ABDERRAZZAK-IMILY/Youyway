@@ -28,7 +28,6 @@ const AdminSidebar = () => {
     { path: '/admin-dashboard', name: 'Dashboard', icon: <FaHome /> },
     { path: '/admin-users', name: 'User Management', icon: <FaUsers /> },
     { path: '/admin-sessions', name: 'Session Management', icon: <FaCalendarAlt /> },
-    { path: '/admin-settings', name: 'Settings', icon: <FaCog /> },
   ];
 
   return (

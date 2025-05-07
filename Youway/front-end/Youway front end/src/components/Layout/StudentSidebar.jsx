@@ -15,17 +15,7 @@ const menuItems = [
   {
     name: 'Find Mentors',
     icon: <BsSearch size={20} />,
-    to: '/find-mentors',
-  },
-  {
-    name: 'My Sessions',
-    icon: <BsCalendarCheck size={20} />,
-    to: '/student-sessions',
-  },
-  {
-    name: 'Create Session',
-    icon: <MdFeedback size={20} />,
-    to: '/createsession',
+    to: '/mentores',
   },
   {
     name: 'Profile',
@@ -56,7 +46,7 @@ export default function StudentSidebar() {
       isOpen ? 'w-64' : 'w-20'
     }`}>
       <div className="flex items-center justify-between p-5 border-b">
-        {isOpen && <h1 className="text-xl font-bold text-white">YouWay</h1>}
+        {isOpen && <h1 className="text-xl font-bold text-white">Youway</h1>}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 rounded-full hover:bg-gray-100 focus:outline-none"

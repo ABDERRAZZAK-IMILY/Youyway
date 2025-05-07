@@ -23,7 +23,6 @@ import StudentDashboard from "../pages/Student/StudentDashboard.jsx";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
 import UserManagement from "../pages/Admin/UserManagement";
 import SessionManagement from "../pages/Admin/SessionManagement";
-import Settings from "../pages/Admin/Settings";
 import AdminLayout from "../components/Layout/AdminLayout";
 
 import Profile from "../pages/Student/profile";
@@ -33,30 +32,8 @@ import MentorEditProfile from "../pages/Mentor/MentorEditProfile";
 import ManageAvailability from "../pages/Mentor/ManageAvailability";
 import MentorDetail from "../pages/Student/MentorDetail";
 
+import Mentores from "../pages/Mentores.jsx";
 export const router = createBrowserRouter([
-    // Admin Routes
-    {
-        path: "/",
-        element: <AdminLayout />,
-        children: [
-            {
-                path: "/admin-dashboard",
-                element: <AdminDashboard />
-            },
-            {
-                path: "/admin-users",
-                element: <UserManagement />
-            },
-            {
-                path: "/admin-sessions",
-                element: <SessionManagement />
-            },
-            {
-                path: "/admin-settings",
-                element: <Settings />
-            }
-        ]
-    },
     {
    
         element : <Layout />,
@@ -77,7 +54,11 @@ export const router = createBrowserRouter([
                 path : "/complete-profile",
                 element : <CompleteProfile />
             }
-            
+            ,
+            {
+                path : "/mentors",
+                element : <Mentores/>
+            }
         ]
         
     },
@@ -137,7 +118,7 @@ export const router = createBrowserRouter([
             }
         
             , {
-                path : "/profile" ,
+                path : "/student-profile" ,
         
                 element : <Profile/>
             }
@@ -164,5 +145,25 @@ export const router = createBrowserRouter([
         ]
     },
 
+
+     // Admin Routes
+     {
+        path: "/",
+        element: <AdminLayout />,
+        children: [
+            {
+                path: "/admin-dashboard",
+                element: <AdminDashboard />
+            },
+            {
+                path: "/admin-users",
+                element: <UserManagement />
+            },
+            {
+                path: "admin-sessions",
+                element: <SessionManagement />
+            }
+        ]
+    },
   
 ]);

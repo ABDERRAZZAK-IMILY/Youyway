@@ -30,11 +30,9 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
     response => response,
     error => {
-        // Only redirect to login for protected routes, not for public routes like mentor-detail
         if (error.response && error.response.status === 401) {
             console.error('Unauthorized access', error.config.url);
             
-            // Don't redirect for specific public endpoints
             if (error.config.url && error.config.url.includes('/mentors/')) {
                 return Promise.reject(error);
             }
