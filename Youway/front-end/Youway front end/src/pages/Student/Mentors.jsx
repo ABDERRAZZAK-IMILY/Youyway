@@ -121,10 +121,16 @@ export default function Mentor() {
               </div>
             </div>
 
-            <div className="px-5 pb-5 pt-0">
+            <div className="px-5 pb-5 pt-0 space-y-2">
+              <Link
+                to={`/mentor-detail/${mentor.id}`}
+                className="block w-full text-center bg-blue-500 text-white font-medium py-2 rounded hover:bg-blue-600 transition"
+              >
+                Voir le profil
+              </Link>
               <Link
                 to={`/book-session/${mentor.id}`}
-                className="block w-full text-center bg-green-500 text-white font-medium py-2 rounded hover:bg-blue-600 transition"
+                className="block w-full text-center bg-green-500 text-white font-medium py-2 rounded hover:bg-green-600 transition"
               >
                 Planifier une session
               </Link>
