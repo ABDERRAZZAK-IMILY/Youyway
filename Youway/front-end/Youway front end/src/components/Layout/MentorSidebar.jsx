@@ -5,6 +5,7 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { MdOutlineMeetingRoom } from 'react-icons/md';
 import { FaUser, FaChalkboardTeacher, FaSignOutAlt } from 'react-icons/fa';
+import { TiMessages } from "react-icons/ti";
 
 const menuItems = [
   {
@@ -27,6 +28,12 @@ const menuItems = [
     icon: <BsFillPeopleFill size={20} />,
     to: '/mentor-availability',
   }
+  ,
+    {
+      name: 'Chat',
+      icon: <TiMessages size={20} />,
+      to: '/chat',
+    }
 ];
 
 export default function MentorSidebar() {

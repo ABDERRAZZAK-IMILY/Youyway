@@ -5,6 +5,7 @@ import { BsCalendarCheck, BsSearch } from 'react-icons/bs';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { FaUser, FaGraduationCap, FaSignOutAlt } from 'react-icons/fa';
 import { MdFeedback } from 'react-icons/md';
+import { TiMessages } from "react-icons/ti";
 
 const menuItems = [
   {
@@ -21,6 +22,11 @@ const menuItems = [
     name: 'Profile',
     icon: <FaUser size={20} />,
     to: '/student-profile',
+  },
+  {
+    name: 'Chat',
+    icon: <TiMessages size={20} />,
+    to: '/chat',
   }
 ];
 

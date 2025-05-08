@@ -165,5 +165,9 @@ export const router = createBrowserRouter([
             }
         ]
     },
+            {
+                path : "/chat",
+                element : <Inbox/>
+            }
   
 ]);
