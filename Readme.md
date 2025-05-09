@@ -60,3 +60,4 @@ YouWay supports three distinct user roles, each with customized interfaces and c
 
   ### URL
   TRELLO  : https://trello.com/invite/b/681cad9d05142d7121786fbb/ATTI85fe0ad82a06b0b56715548ed3dcbb6d4839D0D8/youway
+  Figma : https://www.figma.com/design/kL1huascngdcDUsAKigXht/Youway?node-id=2415-26437&t=1hGbZGp8t2f9nmu2-1
